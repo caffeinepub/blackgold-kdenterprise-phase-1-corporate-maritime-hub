@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset='UTF-8' />
+        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+        
+        <!-- Primary Meta Tags -->
+        <title>Blackgold Kdenterprise - Maritime & Offshore Operations Excellence</title>
+        <meta name='title' content='Blackgold Kdenterprise - Maritime & Offshore Operations Excellence' />
+        <meta name='description' content='Leading maritime and offshore operations company since 1995. Specializing in ship management, crew services, underwater mining, and innovative BGKD crypto token solutions. 200+ vessels, 5,000+ crew, operating in 45 countries.' />
+        <meta name='keywords' content='maritime operations, ship management, offshore crewing, vessel management, underwater mining, BGKD crypto token, ship brokerage, technical management, crew management' />
+        <meta name='author' content='Blackgold Kdenterprise' />
+        
+        <!-- Open Graph / Facebook -->
+        <meta property='og:type' content='website' />
+        <meta property='og:url' content='https://kdent.org/' />
+        <meta property='og:title' content='Blackgold Kdenterprise - Maritime & Offshore Operations Excellence' />
+        <meta property='og:description' content='Leading maritime and offshore operations company since 1995. Specializing in ship management, crew services, underwater mining, and innovative BGKD crypto token solutions. 200+ vessels, 5,000+ crew, operating in 45 countries.' />
+        <meta property='og:image' content='https://kdent.org/assets/generated/bgkd-hero-banner-animated.dim_1200x600.jpg' />
+        <meta property='og:image:width' content='1200' />
+        <meta property='og:image:height' content='600' />
+        <meta property='og:image:alt' content='Blackgold Kdenterprise - Maritime Operations and BGKD Crypto Token' />
+        <meta property='og:site_name' content='Blackgold Kdenterprise' />
+        <meta property='og:locale' content='en_US' />
+        
+        <!-- Twitter Card -->
+        <meta name='twitter:card' content='summary_large_image' />
+        <meta name='twitter:url' content='https://kdent.org/' />
+        <meta name='twitter:title' content='Blackgold Kdenterprise - Maritime & Offshore Operations Excellence' />
+        <meta name='twitter:description' content='Leading maritime and offshore operations company since 1995. Specializing in ship management, crew services, underwater mining, and innovative BGKD crypto token solutions.' />
+        <meta name='twitter:image' content='https://kdent.org/assets/generated/bgkd-hero-banner-animated.dim_1200x600.jpg' />
+        <meta name='twitter:image:alt' content='Blackgold Kdenterprise - Maritime Operations and BGKD Crypto Token' />
+        
+        <!-- Canonical URL -->
+        <link rel='canonical' href='https://kdent.org/' />
+        
+        <!-- Favicon -->
+        <link rel='icon' type='image/png' href='/assets/generated/bgkd-token-logo.dim_400x400.png' />
+        
+        <!-- Font Awesome CDN -->
+        <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css' integrity='sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==' crossorigin='anonymous' referrerpolicy='no-referrer' />
+        
+        <!-- Google Analytics 4 -->
+        <!-- Replace G-XXXXXXXXXX with your actual GA4 Measurement ID -->
+        <script async src='https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX'></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-XXXXXXXXXX');
+
+          // Enhanced GA4 Event Tracking
+          (function() {
+            // Track whitepaper and contract link clicks
+            document.addEventListener('click', function(e) {
+              var target = e.target.closest('a, button');
+              if (!target) return;
+              
+              var href = target.getAttribute('href') || '';
+              var text = target.textContent.toLowerCase();
+              
+              // Track whitepaper downloads
+              if (text.includes('whitepaper') || href.includes('whitepaper')) {
+                gtag('event', 'investor_document_view', {
+                  document_title: 'BGKD Whitepaper',
+                  document_type: 'whitepaper',
+                  link_url: href || window.location.href
+                });
+              }
+              
+              // Track contract link clicks
+              if (text.includes('contract') || href.includes('contract')) {
+                gtag('event', 'investor_document_view', {
+                  document_title: 'BGKD Smart Contract',
+                  document_type: 'contract',
+                  link_url: href || window.location.href
+                });
+              }
+            });
+
+            // Track form submissions
+            document.addEventListener('submit', function(e) {
+              var form = e.target;
+              var formName = 'unknown';
+              var formLocation = window.location.pathname;
+              
+              // Identify form type by checking form attributes or nearby elements
+              if (form.id) {
+                formName = form.id;
+              } else if (form.querySelector('[name="message"]')) {
+                // Check context to determine form type
+                var formContext = form.closest('[data-form-type]');
+                if (formContext) {
+                  formName = formContext.getAttribute('data-form-type');
+                } else {
+                  // Fallback: check page context
+                  if (formLocation.includes('contact')) {
+                    formName = 'contact_form';
+                  } else if (formLocation.includes('career')) {
+                    formName = 'career_form';
+                  } else if (formLocation.includes('crypto') || formLocation.includes('token')) {
+                    formName = 'investor_form';
+                  } else {
+                    formName = 'general_form';
+                  }
+                }
+              }
+              
+              gtag('event', 'form_submit', {
+                form_name: formName,
+                form_location: formLocation
+              });
+            });
+
+            // Track 90% scroll depth (fire once per pageview)
+            var scrollTracked = false;
+            window.addEventListener('scroll', function() {
+              if (scrollTracked) return;
+              
+              var scrollPercentage = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100;
+              
+              if (scrollPercentage >= 90) {
+                scrollTracked = true;
+                gtag('event', 'scroll_depth_90', {
+                  page_location: window.location.href,
+                  page_title: document.title
+                });
+              }
+            });
+          })();
+        </script>
+        
+        <!-- JSON-LD Structured Data - Organization -->
+        <script type='application/ld+json'>
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "Blackgold Kdenterprise",
+          "alternateName": "Blackgold Kdent",
+          "url": "https://kdent.org",
+          "logo": "https://kdent.org/assets/generated/bgkd-token-logo.dim_400x400.png",
+          "description": "Leading maritime and offshore operations company specializing in ship management, crew services, underwater mining, and BGKD crypto token solutions since 1995.",
+          "foundingDate": "1995",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "651 N Broad St #206",
+            "addressLocality": "Middletown",
+            "addressRegion": "DE",
+            "postalCode": "19709",
+            "addressCountry": "US"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+1-646-631-8561",
+            "contactType": "Customer Service",
+            "email": "info@kdent.org",
+            "areaServed": "Worldwide",
+            "availableLanguage": ["English"]
+          },
+          "sameAs": [
+            "https://kdent.org"
+          ],
+          "numberOfEmployees": {
+            "@type": "QuantitativeValue",
+            "value": "5000+"
+          },
+          "slogan": "Navigating the Future of Maritime",
+          "knowsAbout": [
+            "Maritime Operations",
+            "Ship Management",
+            "Offshore Crewing",
+            "Vessel Management",
+            "Underwater Mining",
+            "Crew Management",
+            "Ship Brokerage",
+            "Technical Management",
+            "Cryptocurrency"
+          ]
+        }
+        </script>
+        
+        <!-- JSON-LD Structured Data - Website -->
+        <script type='application/ld+json'>
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Blackgold Kdenterprise",
+          "url": "https://kdent.org",
+          "description": "Professional maritime and offshore operations company website showcasing services, fleet, and BGKD crypto token offerings.",
+          "publisher": {
+            "@type": "Organization",
+            "name": "Blackgold Kdenterprise",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://kdent.org/assets/generated/bgkd-token-logo.dim_400x400.png"
+            }
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://kdent.org/?s={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }
+        </script>
+        
+        <!-- Verification Comment: View page source to confirm GA4 tracking script and Open Graph meta tags are properly loaded -->
+    </head>
+    <body>
+        <div id='root'></div>
+        <script type='module' src='/src/main.tsx'></script>
+    </body>
+</html>

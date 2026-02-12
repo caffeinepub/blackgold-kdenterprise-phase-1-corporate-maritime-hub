@@ -1,0 +1,152 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 5,
+  "summary": "Project direction is at an architectural fork: keep ICP-native KD Platform (React + Motoko) OR build a standalone Web2 stack (“KD Enterprise”) with Node.js/Express + MySQL + JWT + static HTML/JS frontend (and optionally a Netlify-hosted “KA.ai + KD Enterprise” identity-gated dashboard with serverless functions for AI proxy, token generation, and analytics).",
+  "architectural_notes": [
+    "Project stack includes: static frontend (HTML/CSS/JS) + Node.js/Express API + MySQL DB; frontend fetches backend API at http://localhost:5000/api.",
+    "Backend should use environment variables for PORT and DB credentials; include basic security headers middleware.",
+    "Need explicit decision on runtime target: ICP-native (React+Motoko) vs standalone Web2 (Node/Express/MySQL); the Node/MySQL stack cannot run inside the ICP draft environment.",
+    "If pursuing KA.ai + KD Enterprise on Netlify: use Netlify Identity + Functions for AI proxy/token/analytics; frontend is static with serverless backend endpoints."
+  ],
+  "known_issues": [
+    "Draft app environment may expire and require rebuild/redeploy; treat as tooling hiccup rather than design issue.",
+    "Attempting to generate an entire full-stack codebase in a single build/prompt caused builder confusion/failure; refinement should be done in smaller, staged layers."
+  ],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-add-a-new-kd-platform-landing-page-in-the-existing-react-app-that-mirrors-the-user-provided-index-html-intent-headline-cta-button-but-implemented-as-a-react-route-and-styled-with-tailwind",
+      "title": "Add a new KD Platform landing page in the existing React app that mirrors the user-provided `index.html` intent (headline + CTA button), but implemented as a React route and styled with Tailwind.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-new-kd-dashboard-page-route-that-mirrors-the-user-provided-dashboard-html-intent-including-a-total-users-card-that-fetches-and-displays-a-live-user-count-from-the-motoko-canister",
+      "title": "Add a new KD Dashboard page route that mirrors the user-provided `dashboard.html` intent, including a ‘Total Users’ card that fetches and displays a live user count from the Motoko canister.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-kd-platform-entry-in-the-existing-site-navigation-desktop-mobile-that-links-to-the-new-kd-platform-landing-page-route",
+      "title": "Add a ‘KD Platform’ entry in the existing site navigation (desktop + mobile) that links to the new KD Platform landing page route.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-show-a-token-contract-placeholder-section-on-the-kd-dashboard-page-using-the-exact-placeholder-text-provided-by-the-user",
+      "title": "Show a token contract placeholder section on the KD dashboard page using the exact placeholder text provided by the user.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-coherent-kd-platform-visual-theme-distinct-from-the-existing-maritime-theme-inspired-by-the-user-s-provided-dark-neon-teal-styling-and-use-it-consistently-across-the-new-kd-landing-dashboard-pages",
+      "title": "Apply a coherent KD Platform visual theme distinct from the existing maritime theme, inspired by the user’s provided dark + neon-teal styling, and use it consistently across the new KD landing + dashboard pages.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-minimal-admin-only-user-management-workflow-that-replaces-the-user-s-requested-web2-register-login-approach-expose-an-admin-only-canister-method-to-add-users-name-email-and-a-frontend-form-on-the-kd-dashboard-to-call-it",
+      "title": "Add a minimal admin-only user management workflow that replaces the user’s requested Web2 register/login approach: expose an admin-only canister method to add users (name + email) and a frontend form on the KD dashboard to call it.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-kd-platform-dashboard-guard-that-prompts-the-user-to-authenticate-with-internet-identity-before-loading-protected-kd-dashboard-data-using-clear-english-user-facing-messaging",
+      "title": "Add a KD Platform dashboard guard that prompts the user to authenticate with Internet Identity before loading protected KD dashboard data, using clear English user-facing messaging.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create KD Platform full project scaffold: frontend (HTML/CSS/JS) with index + dashboard pages and basic navigation",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Implement Node.js/Express backend API with CORS + JSON parsing and basic routes (e.g., /api/users count)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Add MySQL database setup and integration (db connection, schema for users, seed admin user)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Add environment configuration (.env) and deployment-ready project structure/README run instructions",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Add basic production security headers middleware in backend",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Add token placeholder display/integration point in dashboard UI",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Implement a Motoko backend API equivalent to `GET /api/users` that returns the total user count from canister state, and expose it through the generated frontend declarations for React Query to call.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Add minimal user records support in the Motoko canister to replace the requested MySQL `users` table, including an admin-only method to add users and a safe default/seed so the dashboard can display a non-zero count in a fresh deployment.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Build standalone KD Enterprise Web2 stack: Node.js/Express REST API + MySQL + JWT auth + security headers + static HTML/CSS/JS pages (index/login/register/dashboard)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Add KA.ai + KD Enterprise Netlify deployment package: Netlify Identity gate + serverless functions (Perplexity proxy, KD token generator, analytics) + A2 SaaS dark UI",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Ensure the KD Platform dashboard user count works on a fresh deployment by seeding at least one user record in the Motoko canister when the platform is first initialized (so the dashboard does not show 0 unless the admin explicitly clears users).",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "KD Platform",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

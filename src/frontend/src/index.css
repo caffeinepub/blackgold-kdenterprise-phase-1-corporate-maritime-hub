@@ -1,0 +1,217 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Maritime Navy Blues - Primary */
+    --maritime-navy: oklch(0.20 0.05 240);
+    --maritime-blue: oklch(0.35 0.08 240);
+    --maritime-blue-light: oklch(0.65 0.10 240);
+    
+    /* Maritime Gold - Accent */
+    --maritime-gold: oklch(0.75 0.15 85);
+    --maritime-gold-dark: oklch(0.60 0.15 85);
+    
+    /* KD Platform Dark + Neon Teal Theme */
+    --kd-bg: oklch(0.12 0.02 240);
+    --kd-panel: oklch(0.18 0.03 240);
+    --kd-panel-border: oklch(0.25 0.04 240);
+    --kd-neon: oklch(0.70 0.18 180);
+    --kd-text: oklch(0.95 0.01 180);
+    --kd-text-muted: oklch(0.65 0.05 180);
+    
+    /* Base colors */
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.20 0.05 240);
+
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.20 0.05 240);
+
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.20 0.05 240);
+
+    --primary: oklch(0.75 0.15 85);
+    --primary-foreground: oklch(0.20 0.05 240);
+
+    --secondary: oklch(0.35 0.08 240);
+    --secondary-foreground: oklch(1 0 0);
+
+    --muted: oklch(0.96 0.01 240);
+    --muted-foreground: oklch(0.50 0.05 240);
+
+    --accent: oklch(0.75 0.15 85);
+    --accent-foreground: oklch(0.20 0.05 240);
+
+    --destructive: oklch(0.55 0.22 25);
+    --destructive-foreground: oklch(1 0 0);
+
+    --border: oklch(0.90 0.02 240);
+    --input: oklch(0.90 0.02 240);
+    --ring: oklch(0.75 0.15 85);
+
+    --radius: 0.5rem;
+
+    --success: oklch(0.60 0.15 145);
+    --success-foreground: oklch(1 0 0);
+
+    --warning: oklch(0.70 0.15 65);
+    --warning-foreground: oklch(0.20 0.05 240);
+  }
+
+  .dark {
+    --background: oklch(0.15 0.05 240);
+    --foreground: oklch(0.95 0.01 240);
+
+    --card: oklch(0.20 0.05 240);
+    --card-foreground: oklch(0.95 0.01 240);
+
+    --popover: oklch(0.20 0.05 240);
+    --popover-foreground: oklch(0.95 0.01 240);
+
+    --primary: oklch(0.75 0.15 85);
+    --primary-foreground: oklch(0.20 0.05 240);
+
+    --secondary: oklch(0.35 0.08 240);
+    --secondary-foreground: oklch(0.95 0.01 240);
+
+    --muted: oklch(0.25 0.05 240);
+    --muted-foreground: oklch(0.65 0.05 240);
+
+    --accent: oklch(0.75 0.15 85);
+    --accent-foreground: oklch(0.20 0.05 240);
+
+    --destructive: oklch(0.55 0.22 25);
+    --destructive-foreground: oklch(0.95 0.01 240);
+
+    --border: oklch(0.30 0.05 240);
+    --input: oklch(0.30 0.05 240);
+    --ring: oklch(0.75 0.15 85);
+
+    --success: oklch(0.60 0.15 145);
+    --success-foreground: oklch(0.95 0.01 240);
+
+    --warning: oklch(0.70 0.15 65);
+    --warning-foreground: oklch(0.20 0.05 240);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* KD Platform Wrapper - Dark + Neon Teal Theme */
+.kd-platform-wrapper {
+  background: oklch(var(--kd-bg));
+  color: oklch(var(--kd-text));
+}
+
+.kd-card {
+  background: oklch(var(--kd-panel));
+  border-color: oklch(var(--kd-panel-border));
+  color: oklch(var(--kd-text));
+}
+
+/* Animation delay utilities */
+@layer utilities {
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+  .animation-delay-600 {
+    animation-delay: 600ms;
+  }
+  .animation-delay-800 {
+    animation-delay: 800ms;
+  }
+}
+
+/* Premium Metallic Gift Card Styling */
+.gift-card-metallic {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    oklch(0.95 0.02 85) 0%,
+    oklch(0.98 0.01 85) 25%,
+    oklch(0.92 0.03 85) 50%,
+    oklch(0.98 0.01 85) 75%,
+    oklch(0.95 0.02 85) 100%
+  );
+  background-size: 200% 200%;
+  animation: metallicShimmer 3s ease-in-out infinite;
+}
+
+@keyframes metallicShimmer {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Holographic effect overlay */
+.gift-card-metallic::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    oklch(0.75 0.15 85 / 0.1) 50%,
+    transparent 70%
+  );
+  background-size: 200% 200%;
+  animation: holographicSweep 4s linear infinite;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+@keyframes holographicSweep {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Print-friendly styles */
+@media print {
+  .gift-card-metallic {
+    background: oklch(0.95 0.02 85);
+    animation: none;
+  }
+  
+  .gift-card-metallic::before {
+    display: none;
+  }
+  
+  body {
+    background: white;
+  }
+}
+
+/* Slow pulse animation for IC connection badge */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

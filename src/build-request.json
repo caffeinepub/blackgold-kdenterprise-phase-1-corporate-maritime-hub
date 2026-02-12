@@ -1,0 +1,80 @@
+{
+  "kind": "build_request",
+  "title": "Consolidate KD Platform work: ICP-native user count seeding + admin add-user UI (no Node/MySQL)",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-8",
+      "text": "Ensure the KD Platform dashboard user count works on a fresh deployment by seeding at least one user record in the Motoko canister when the platform is first initialized (so the dashboard does not show 0 unless the admin explicitly clears users).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Add all work in my web"
+        ]
+      },
+      "acceptanceCriteria": [
+        "On a brand-new deployment, after initializing access control, `getTotalUsers()` returns a value >= 1 for an authorized caller.",
+        "The seed operation is idempotent (re-initialization does not create duplicate seed users).",
+        "If the users map is non-empty, the seed logic does not modify existing users."
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "text": "Add a minimal admin-only user management workflow that replaces the user’s requested Web2 register/login approach: expose an admin-only canister method to add users (name + email) and a frontend form on the KD dashboard to call it.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "You want clean, structured, complete A-to-Z full-stack HTTP + HTML + API coding blueprint from absolute start to production.",
+          "🔐 JWT Authentication",
+          "routes/auth.js",
+          "routes/users.js"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend: an admin-only method exists to add a user record with name + email, and it updates the total user count.",
+        "Frontend: KD Dashboard shows an “Admin” section (only when the caller is an admin) with inputs for name and email and an “Add user” action.",
+        "After adding a user via the UI, the “Total Users” card updates (via React Query invalidation/refetch) and displays the new count.",
+        "Non-admin callers cannot add users (backend enforces authorization and frontend does not render the admin form)."
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "text": "Add a KD Platform dashboard guard that prompts the user to authenticate with Internet Identity before loading protected KD dashboard data, using clear English user-facing messaging.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Then I execute the next step precisely."
+        ]
+      },
+      "acceptanceCriteria": [
+        "If the user is not authenticated/authorized to call `getTotalUsers()`, the KD dashboard displays a friendly sign-in prompt in English instead of a generic error.",
+        "After signing in, the dashboard loads and displays the live total user count.",
+        "No changes are made to immutable hook files (Internet Identity hooks remain unmodified)."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not implement or add Node.js/Express, JWT authentication, MySQL, Netlify Identity, or Netlify Functions in this project.",
+    "Backend must remain a single Motoko actor (all logic in backend/main.mo); only add backend/migration.mo changes if required for stable state upgrades (conditional migration policy).",
+    "Do not edit files under frontend/src/hooks/useInternetIdentity.ts(x), frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or any files in frontend/src/components/ui (compose them instead).",
+    "Use English for any user-facing text."
+  ],
+  "nonGoals": [
+    "Implementing Perplexity (or any other) AI proxy/LLM integration.",
+    "Implementing Web2 email/password registration/login flows (bcrypt/JWT) or any external database schema.",
+    "Adding third-party auth providers beyond Internet Identity."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

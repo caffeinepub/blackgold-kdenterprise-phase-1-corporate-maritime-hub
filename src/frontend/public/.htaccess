@@ -1,0 +1,41 @@
+# Apache configuration for automatic WebP negotiation
+# Serve WebP images when supported by the browser
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Check if browser accepts WebP
+  RewriteCond %{HTTP_ACCEPT} image/webp
+
+  # Check if WebP version exists
+  RewriteCond %{REQUEST_FILENAME} (.*)\.(jpe?g|png)$
+  RewriteCond %1.webp -f
+
+  # Serve WebP instead
+  RewriteRule (.*)\.(jpe?g|png)$ $1.webp [T=image/webp,E=accept:1,L]
+</IfModule>
+
+# Add Vary header for proper caching
+<IfModule mod_headers.c>
+  <FilesMatch "\.(jpe?g|png)$">
+    Header append Vary Accept
+  </FilesMatch>
+</IfModule>
+
+# Set proper MIME type for WebP
+<IfModule mod_mime.c>
+  AddType image/webp .webp
+</IfModule>
+
+# Enable compression for WebP images
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE image/webp
+</IfModule>
+
+# Cache control for optimized images
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+</IfModule>

@@ -1,2 +1,3 @@
-# blackgold-kdenterprise-phase-1-corporate-maritime-hub
-Exported from Caffeine project: KD Platform
+## 
+
+To run app build and run docker image: `docker build -t app . docker run -it --network host app`

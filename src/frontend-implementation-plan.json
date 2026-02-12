@@ -1,0 +1,54 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "KD Platform Dashboard: Internet Identity guard + admin add-user UI with React Query refetch",
+  "requirements": [
+    {
+      "id": "REQ-9",
+      "summary": "Add an admin-only “Add user” form on the KD dashboard that calls the canister addUser method and refreshes Total Users.",
+      "acceptanceCriteria": [
+        "Frontend: KD Dashboard shows an “Admin” section (only when the caller is an admin) with inputs for name and email and an “Add user” action.",
+        "After adding a user via the UI, the “Total Users” card updates (via React Query invalidation/refetch) and displays the new count.",
+        "Non-admin callers cannot add users (backend enforces authorization and frontend does not render the admin form)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Add React Query hooks for KD admin UX: a query hook to read admin status (calling the existing backend capability isCallerAdmin()) and a mutation hook to add a user (calling the existing backend capability addUser(name, email)) that invalidates/refetches the ['totalUsers'] query on success. Also adjust useTotalUsers to support an optional enabled flag so the dashboard can avoid querying when not signed in. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/kd/AdminAddUserCard.tsx",
+          "operation": "create",
+          "description": "Create a KD dashboard Admin UI card that renders name/email inputs and an “Add user” button, using shadcn-ui components (Card, Button, Input, Label, Alert) for consistent styling, and calling the new hooks to submit and show success/error states. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/KDDashboardPage.tsx",
+          "operation": "modify",
+          "description": "Wire the new AdminAddUserCard into the KD dashboard page: fetch admin status via the new hook and render the Admin section only when isCallerAdmin is true; ensure the add-user action triggers React Query invalidation so the Total Users card updates after a successful add. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Guard the KD dashboard with an Internet Identity sign-in prompt and show friendly English messaging on unauthorized access.",
+      "acceptanceCriteria": [
+        "If the user is not authenticated/authorized to call `getTotalUsers()`, the KD dashboard displays a friendly sign-in prompt in English instead of a generic error.",
+        "After signing in, the dashboard loads and displays the live total user count.",
+        "No changes are made to immutable hook files (Internet Identity hooks remain unmodified)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/KDDashboardPage.tsx",
+          "operation": "modify",
+          "description": "Add an Internet Identity guard to the KD dashboard: use the existing useInternetIdentity hook (without modifying it) to detect authentication state; when not authenticated, render a clear English sign-in prompt with a Login button (calling login) instead of querying protected dashboard data. When authenticated, load total users; if the backend call fails due to authorization (e.g., trap message indicating unauthorized), replace the generic error UI with the same friendly sign-in/authorization message. Use the authorization component guidance to present an AccessDenied-style experience for unauthorized callers, and use shadcn-ui components (Button/Alert/Card) for consistent UI. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Ensure the Total Users query can be disabled until the user is authenticated (and/or until the dashboard guard allows protected data fetching) to prevent avoidable unauthorized errors. Verify the component's usage instructions before implementing."
+        }
+      ]
+    }
+  ]
+}
