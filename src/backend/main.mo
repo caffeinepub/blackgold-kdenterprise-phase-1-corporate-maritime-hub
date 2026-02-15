@@ -13,6 +13,9 @@ import Debug "mo:base/Debug";
 import AccessControl "authorization/access-control";
 import Users "users/Users";
 
+import Migration "migration";
+
+(with migration = Migration.run)
 actor BlackgoldKdent {
   let storage = Storage.new();
   include MixinStorage(storage);
@@ -224,6 +227,78 @@ actor BlackgoldKdent {
     email : Text;
   };
 
+  // NOC Types
+  public type AIStatus = {
+    status : Text;
+    lastUpdated : Time.Time;
+    currentTask : Text;
+    error : ?Text;
+  };
+
+  public type TreasuryStatus = {
+    totalValue : Nat;
+    currencyBreakdown : [(Text, Nat)];
+    liquidity : Float;
+    reserves : Nat;
+    lastAudit : Time.Time;
+  };
+
+  public type DAOProposal = {
+    id : Text;
+    title : Text;
+    description : Text;
+    votesFor : Nat;
+    votesAgainst : Nat;
+    status : Text;
+    createdAt : Time.Time;
+    votingDeadline : Time.Time;
+  };
+
+  public type ZKSolvencyProof = {
+    root : Text;
+    lastProofTime : Time.Time;
+    status : Text;
+  };
+
+  public type OmniMeshStatus = {
+    status : Text;
+    lastSync : Time.Time;
+    nodes : Nat;
+    active : Bool;
+  };
+
+  // NOC State (Stable)
+  var aiStatus : AIStatus = {
+    status = "idle";
+    lastUpdated = Time.now();
+    currentTask = "none";
+    error = null;
+  };
+
+  var treasuryStatus : TreasuryStatus = {
+    totalValue = 0;
+    currencyBreakdown = [];
+    liquidity = 0.0;
+    reserves = 0;
+    lastAudit = Time.now();
+  };
+
+  var daoProposals : [DAOProposal] = [];
+  var zkSolvencyProof : ZKSolvencyProof = {
+    root = "0x0";
+    lastProofTime = Time.now();
+    status = "valid";
+  };
+
+  var omniMeshStatus : OmniMeshStatus = {
+    status = "operational";
+    lastSync = Time.now();
+    nodes = 0;
+    active = true;
+  };
+
+  var universalLaunchState : Bool = false;
+
   var services : OrderedMap.Map<Text, Service> = textMap.empty<Service>();
   var vessels : OrderedMap.Map<Text, Vessel> = textMap.empty<Vessel>();
   var careerInquiries : OrderedMap.Map<Text, CareerInquiry> = textMap.empty<CareerInquiry>();
@@ -259,6 +334,89 @@ actor BlackgoldKdent {
     environment : Text;
     canisterId : Text;
     network : Text;
+  };
+
+  // NOC Methods - All require user-level access for Sovereign Core RBAC
+  public query ({ caller }) func getAIStatus() : async AIStatus {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Debug.trap("Unauthorized: Only users can access AI status");
+    };
+    aiStatus;
+  };
+
+  public query ({ caller }) func getTreasuryStatus() : async TreasuryStatus {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Debug.trap("Unauthorized: Only users can access treasury status");
+    };
+    treasuryStatus;
+  };
+
+  public query ({ caller }) func getDaoProposals() : async [DAOProposal] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Debug.trap("Unauthorized: Only users can access DAO proposals");
+    };
+    daoProposals;
+  };
+
+  public shared ({ caller }) func voteOnProposal(proposalId : Text, support : Bool) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Debug.trap("Unauthorized: Only users can vote");
+    };
+
+    daoProposals := Array.map<DAOProposal, DAOProposal>(
+      daoProposals,
+      func(p) {
+        if (p.id == proposalId) {
+          if (support) {
+            { p with votesFor = p.votesFor + 1 };
+          } else { { p with votesAgainst = p.votesAgainst + 1 } };
+        } else { p };
+      },
+    );
+  };
+
+  public query ({ caller }) func getZkCurrentRoot() : async Text {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Debug.trap("Unauthorized: Only users can access ZK root");
+    };
+    zkSolvencyProof.root;
+  };
+
+  public shared ({ caller }) func generateZkSolvencyProof() : async Text {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Debug.trap("Unauthorized: Only users can generate ZK proofs");
+    };
+
+    let newRoot = "0x" # Int.toText(Time.now());
+    zkSolvencyProof := {
+      zkSolvencyProof with
+      root = newRoot;
+      lastProofTime = Time.now();
+      status = "valid";
+    };
+    newRoot;
+  };
+
+  public query ({ caller }) func getOmniMeshStatus() : async OmniMeshStatus {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Debug.trap("Unauthorized: Only users can access omni-mesh status");
+    };
+    omniMeshStatus;
+  };
+
+  public shared ({ caller }) func toggleUniversalLaunch() : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Debug.trap("Unauthorized: Only admins can toggle universal launch");
+    };
+
+    universalLaunchState := not universalLaunchState;
+  };
+
+  public query ({ caller }) func getUniversalLaunchState() : async Bool {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Debug.trap("Unauthorized: Only users can access universal launch state");
+    };
+    universalLaunchState;
   };
 
   // Legacy Initialize Auth function
@@ -855,9 +1013,7 @@ actor BlackgoldKdent {
     };
     if (AccessControl.isAdmin(accessControlState, caller)) {
       true;
-    } else {
-      principal == caller;
-    };
+    } else { principal == caller };
   };
 
   // Get Canister Info for Testing - Public
@@ -885,4 +1041,3 @@ actor BlackgoldKdent {
     AccessControl.isAdmin(accessControlState, caller);
   };
 };
-

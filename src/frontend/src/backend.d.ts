@@ -14,9 +14,18 @@ export class ExternalBlob {
     static fromBytes(blob: Uint8Array<ArrayBuffer>): ExternalBlob;
     withUploadProgress(onProgress: (percentage: number) => void): ExternalBlob;
 }
-export interface UserProfile {
-    name: string;
-    email: string;
+export interface AnalyticsData {
+    totalValue: bigint;
+    countriesActive: bigint;
+    activeCards: bigint;
+    redemptionRate: number;
+}
+export interface TreasuryStatus {
+    currencyBreakdown: Array<[string, bigint]>;
+    totalValue: bigint;
+    liquidity: number;
+    reserves: bigint;
+    lastAudit: Time;
 }
 export type Time = bigint;
 export interface GiftCard {
@@ -47,13 +56,6 @@ export interface GiftCard {
     copiesGenerated: bigint;
     qrCode: string;
 }
-export interface ContactForm {
-    id: string;
-    name: string;
-    email: string;
-    message: string;
-    timestamp: Time;
-}
 export interface ConnectionStatus {
     status: string;
     ping?: bigint;
@@ -64,12 +66,31 @@ export interface ConnectionStatus {
     canisterId: string;
     retries: bigint;
 }
+export interface OmniMeshStatus {
+    status: string;
+    active: boolean;
+    nodes: bigint;
+    lastSync: Time;
+}
+export interface ContactForm {
+    id: string;
+    name: string;
+    email: string;
+    message: string;
+    timestamp: Time;
+}
 export interface EmailRecord {
     id: string;
     to: string;
     status: EmailStatus;
     timestamp: Time;
     cardId: string;
+}
+export interface AIStatus {
+    status: string;
+    lastUpdated: Time;
+    error?: string;
+    currentTask: string;
 }
 export interface Tokenomics {
     roadmap: string;
@@ -161,11 +182,19 @@ export interface Export {
     timestamp: Time;
     cardId: string;
 }
-export interface AnalyticsData {
-    totalValue: bigint;
-    countriesActive: bigint;
-    activeCards: bigint;
-    redemptionRate: number;
+export interface DAOProposal {
+    id: string;
+    status: string;
+    title: string;
+    votesAgainst: bigint;
+    votesFor: bigint;
+    createdAt: Time;
+    votingDeadline: Time;
+    description: string;
+}
+export interface UserProfile {
+    name: string;
+    email: string;
 }
 export enum Currency {
     btc = "btc",
@@ -211,6 +240,8 @@ export interface backendInterface {
     addVessel(id: string, name: string, vesselType: string, capacity: bigint, image: ExternalBlob | null, description: string): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
     createGiftCard(id: string, code: string, value: bigint, currency: Currency, cardType: GiftCardType, owner: string, notes: string, expirationDate: Time, originCountry: string, mobileNumber: string, createdBy: string, creationMetadata: string, lastUpdatedBy: string): Promise<void>;
+    generateZkSolvencyProof(): Promise<string>;
+    getAIStatus(): Promise<AIStatus>;
     getAllUsers(): Promise<Array<User>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
@@ -219,18 +250,23 @@ export interface backendInterface {
     getCompanyInfo(): Promise<CompanyInfo | null>;
     getConnectionStatus(): Promise<ConnectionStatus>;
     getContactForms(): Promise<Array<ContactForm>>;
+    getDaoProposals(): Promise<Array<DAOProposal>>;
     getGiftCardAnalytics(): Promise<AnalyticsData>;
     getGiftCardById(id: string): Promise<GiftCard | null>;
     getGiftCards(): Promise<Array<GiftCard>>;
     getInvestorInquiries(): Promise<Array<InvestorInquiry>>;
     getNetworkInfo(): Promise<string>;
+    getOmniMeshStatus(): Promise<OmniMeshStatus>;
     getServices(): Promise<Array<Service>>;
     getTokenomics(): Promise<Tokenomics | null>;
     getTotalUsers(): Promise<bigint>;
+    getTreasuryStatus(): Promise<TreasuryStatus>;
+    getUniversalLaunchState(): Promise<boolean>;
     getUserById(id: bigint): Promise<User>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     getVessels(): Promise<Array<Vessel>>;
     getVesselsByType(vesselType: string): Promise<Array<Vessel>>;
+    getZkCurrentRoot(): Promise<string>;
     healthCheck(): Promise<string>;
     initializeAccessControl(): Promise<void>;
     initializeAdminAccessControl(adminPrincipals: Array<string>): Promise<void>;
@@ -246,6 +282,8 @@ export interface backendInterface {
     submitCareerInquiry(name: string, email: string, message: string): Promise<void>;
     submitContactForm(name: string, email: string, message: string): Promise<void>;
     submitInvestorInquiry(name: string, email: string, message: string): Promise<void>;
+    toggleUniversalLaunch(): Promise<void>;
     updateGiftCardStatus(id: string, newStatus: Status): Promise<void>;
     validatePrincipal(principal: Principal): Promise<boolean>;
+    voteOnProposal(proposalId: string, support: boolean): Promise<void>;
 }

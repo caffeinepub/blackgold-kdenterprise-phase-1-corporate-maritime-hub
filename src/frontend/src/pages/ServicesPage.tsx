@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { useServices } from '@/hooks/useQueries';
+import { useGetServices } from '@/hooks/useQueries';
 import { Loader2, Ship, Users, Wrench, Anchor, Drill, HardHat, Settings, ShoppingCart, Waves } from 'lucide-react';
 import { OptimizedImage } from '@/components/OptimizedImage';
 
@@ -19,7 +19,7 @@ const serviceIcons: Record<string, any> = {
 };
 
 export default function ServicesPage() {
-  const { data: services, isLoading } = useServices();
+  const { data: services, isLoading } = useGetServices();
   const [selectedService, setSelectedService] = useState<any>(null);
 
   if (isLoading) {
@@ -91,31 +91,25 @@ export default function ServicesPage() {
                   loading="lazy"
                 />
               </div>
-              <CardHeader>
-                <CardTitle className="text-2xl text-maritime-navy dark:text-maritime-gold">
+              <CardContent className="p-6">
+                <h3 className="mb-4 text-2xl font-bold text-maritime-navy dark:text-maritime-gold">
                   Oil & Gas Sector
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-maritime-blue-light">
+                </h3>
+                <p className="mb-4 text-maritime-blue-light">
                   Specialized offshore crewing and rig management services with an unwavering focus on safety and operational excellence.
                 </p>
                 <ul className="space-y-2 text-maritime-blue-light">
                   <li className="flex items-start gap-2">
-                    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-maritime-gold" />
-                    <span>Offshore platform crew management</span>
+                    <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-maritime-gold" />
+                    <span>Certified offshore personnel</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-maritime-gold" />
-                    <span>Rig operations and maintenance</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-maritime-gold" />
-                    <span>Safety compliance and training</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-maritime-gold" />
+                    <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-maritime-gold" />
                     <span>24/7 operational support</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-maritime-gold" />
+                    <span>Advanced safety protocols</span>
                   </li>
                 </ul>
               </CardContent>
@@ -131,37 +125,25 @@ export default function ServicesPage() {
                   loading="lazy"
                 />
               </div>
-              <CardHeader>
-                <CardTitle className="text-2xl text-maritime-navy dark:text-maritime-gold">
+              <CardContent className="p-6">
+                <h3 className="mb-4 text-2xl font-bold text-maritime-navy dark:text-maritime-gold">
                   Subsea Exploration
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-maritime-blue-light">
-                  Advanced subsea capabilities with cutting-edge technology and environmental commitment.
+                </h3>
+                <p className="mb-4 text-maritime-blue-light">
+                  Advanced underwater exploration capabilities with state-of-the-art ROV technology and experienced dive teams.
                 </p>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="rounded-lg bg-maritime-gold/10 p-4 text-center">
-                    <div className="text-3xl font-bold text-maritime-gold">3,000m</div>
-                    <div className="text-sm text-maritime-blue-light">Depth Capability</div>
-                  </div>
-                  <div className="rounded-lg bg-maritime-gold/10 p-4 text-center">
-                    <div className="text-3xl font-bold text-maritime-gold">98%</div>
-                    <div className="text-sm text-maritime-blue-light">Recovery Rate</div>
-                  </div>
-                </div>
                 <ul className="space-y-2 text-maritime-blue-light">
                   <li className="flex items-start gap-2">
-                    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-maritime-gold" />
-                    <span>ROV-based operations</span>
+                    <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-maritime-gold" />
+                    <span>3,000m depth capability</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-maritime-gold" />
-                    <span>Environmental protection protocols</span>
+                    <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-maritime-gold" />
+                    <span>98% recovery rate</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-maritime-gold" />
-                    <span>Sustainable extraction methods</span>
+                    <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-maritime-gold" />
+                    <span>Real-time monitoring systems</span>
                   </li>
                 </ul>
               </CardContent>
@@ -181,10 +163,8 @@ export default function ServicesPage() {
               {selectedService?.description}
             </DialogDescription>
           </DialogHeader>
-          <div className="mt-4 space-y-4">
-            <div className="prose prose-sm max-w-none text-maritime-blue-light dark:prose-invert">
-              <p>{selectedService?.details}</p>
-            </div>
+          <div className="space-y-4 text-maritime-blue-light">
+            <p>{selectedService?.details}</p>
           </div>
         </DialogContent>
       </Dialog>

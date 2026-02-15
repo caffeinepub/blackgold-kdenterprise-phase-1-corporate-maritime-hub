@@ -10,6 +10,12 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
+export interface AIStatus {
+  'status' : string,
+  'lastUpdated' : Time,
+  'error' : [] | [string],
+  'currentTask' : string,
+}
 export interface AnalyticsData {
   'totalValue' : bigint,
   'countriesActive' : bigint,
@@ -60,6 +66,16 @@ export type Currency = { 'btc' : null } |
   { 'gbp' : null } |
   { 'usd' : null } |
   { 'bgkd' : null };
+export interface DAOProposal {
+  'id' : string,
+  'status' : string,
+  'title' : string,
+  'votesAgainst' : bigint,
+  'votesFor' : bigint,
+  'createdAt' : Time,
+  'votingDeadline' : Time,
+  'description' : string,
+}
 export interface Email {
   'id' : string,
   'to' : string,
@@ -135,6 +151,12 @@ export interface InvestorInquiry {
   'message' : string,
   'timestamp' : Time,
 }
+export interface OmniMeshStatus {
+  'status' : string,
+  'active' : boolean,
+  'nodes' : bigint,
+  'lastSync' : Time,
+}
 export interface Redemption {
   'redeemedBy' : string,
   'deviceDetails' : string,
@@ -165,6 +187,13 @@ export interface Tokenomics {
   'whitepaperLink' : string,
   'governance' : string,
   'symbol' : string,
+}
+export interface TreasuryStatus {
+  'currencyBreakdown' : Array<[string, bigint]>,
+  'totalValue' : bigint,
+  'liquidity' : number,
+  'reserves' : bigint,
+  'lastAudit' : Time,
 }
 export interface User {
   'id' : bigint,
@@ -239,6 +268,8 @@ export interface _SERVICE {
     ],
     undefined
   >,
+  'generateZkSolvencyProof' : ActorMethod<[], string>,
+  'getAIStatus' : ActorMethod<[], AIStatus>,
   'getAllUsers' : ActorMethod<[], Array<User>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
@@ -247,18 +278,23 @@ export interface _SERVICE {
   'getCompanyInfo' : ActorMethod<[], [] | [CompanyInfo]>,
   'getConnectionStatus' : ActorMethod<[], ConnectionStatus>,
   'getContactForms' : ActorMethod<[], Array<ContactForm>>,
+  'getDaoProposals' : ActorMethod<[], Array<DAOProposal>>,
   'getGiftCardAnalytics' : ActorMethod<[], AnalyticsData>,
   'getGiftCardById' : ActorMethod<[string], [] | [GiftCard]>,
   'getGiftCards' : ActorMethod<[], Array<GiftCard>>,
   'getInvestorInquiries' : ActorMethod<[], Array<InvestorInquiry>>,
   'getNetworkInfo' : ActorMethod<[], string>,
+  'getOmniMeshStatus' : ActorMethod<[], OmniMeshStatus>,
   'getServices' : ActorMethod<[], Array<Service>>,
   'getTokenomics' : ActorMethod<[], [] | [Tokenomics]>,
   'getTotalUsers' : ActorMethod<[], bigint>,
+  'getTreasuryStatus' : ActorMethod<[], TreasuryStatus>,
+  'getUniversalLaunchState' : ActorMethod<[], boolean>,
   'getUserById' : ActorMethod<[bigint], User>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
   'getVessels' : ActorMethod<[], Array<Vessel>>,
   'getVesselsByType' : ActorMethod<[string], Array<Vessel>>,
+  'getZkCurrentRoot' : ActorMethod<[], string>,
   'healthCheck' : ActorMethod<[], string>,
   'initializeAccessControl' : ActorMethod<[], undefined>,
   'initializeAdminAccessControl' : ActorMethod<[Array<string>], undefined>,
@@ -294,8 +330,10 @@ export interface _SERVICE {
   'submitCareerInquiry' : ActorMethod<[string, string, string], undefined>,
   'submitContactForm' : ActorMethod<[string, string, string], undefined>,
   'submitInvestorInquiry' : ActorMethod<[string, string, string], undefined>,
+  'toggleUniversalLaunch' : ActorMethod<[], undefined>,
   'updateGiftCardStatus' : ActorMethod<[string, Status], undefined>,
   'validatePrincipal' : ActorMethod<[Principal], boolean>,
+  'voteOnProposal' : ActorMethod<[string, boolean], undefined>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

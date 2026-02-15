@@ -44,6 +44,12 @@ export const GiftCardType = IDL.Variant({
   'crypto' : IDL.Null,
 });
 export const Time = IDL.Int;
+export const AIStatus = IDL.Record({
+  'status' : IDL.Text,
+  'lastUpdated' : Time,
+  'error' : IDL.Opt(IDL.Text),
+  'currentTask' : IDL.Text,
+});
 export const User = IDL.Record({
   'id' : IDL.Nat,
   'name' : IDL.Text,
@@ -92,6 +98,16 @@ export const ContactForm = IDL.Record({
   'email' : IDL.Text,
   'message' : IDL.Text,
   'timestamp' : Time,
+});
+export const DAOProposal = IDL.Record({
+  'id' : IDL.Text,
+  'status' : IDL.Text,
+  'title' : IDL.Text,
+  'votesAgainst' : IDL.Nat,
+  'votesFor' : IDL.Nat,
+  'createdAt' : Time,
+  'votingDeadline' : Time,
+  'description' : IDL.Text,
 });
 export const AnalyticsData = IDL.Record({
   'totalValue' : IDL.Nat,
@@ -185,6 +201,12 @@ export const InvestorInquiry = IDL.Record({
   'message' : IDL.Text,
   'timestamp' : Time,
 });
+export const OmniMeshStatus = IDL.Record({
+  'status' : IDL.Text,
+  'active' : IDL.Bool,
+  'nodes' : IDL.Nat,
+  'lastSync' : Time,
+});
 export const Service = IDL.Record({
   'id' : IDL.Text,
   'name' : IDL.Text,
@@ -200,6 +222,13 @@ export const Tokenomics = IDL.Record({
   'whitepaperLink' : IDL.Text,
   'governance' : IDL.Text,
   'symbol' : IDL.Text,
+});
+export const TreasuryStatus = IDL.Record({
+  'currencyBreakdown' : IDL.Vec(IDL.Tuple(IDL.Text, IDL.Nat)),
+  'totalValue' : IDL.Nat,
+  'liquidity' : IDL.Float64,
+  'reserves' : IDL.Nat,
+  'lastAudit' : Time,
 });
 export const Vessel = IDL.Record({
   'id' : IDL.Text,
@@ -266,6 +295,8 @@ export const idlService = IDL.Service({
       [],
       [],
     ),
+  'generateZkSolvencyProof' : IDL.Func([], [IDL.Text], []),
+  'getAIStatus' : IDL.Func([], [AIStatus], ['query']),
   'getAllUsers' : IDL.Func([], [IDL.Vec(User)], ['query']),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
@@ -274,14 +305,18 @@ export const idlService = IDL.Service({
   'getCompanyInfo' : IDL.Func([], [IDL.Opt(CompanyInfo)], ['query']),
   'getConnectionStatus' : IDL.Func([], [ConnectionStatus], ['query']),
   'getContactForms' : IDL.Func([], [IDL.Vec(ContactForm)], ['query']),
+  'getDaoProposals' : IDL.Func([], [IDL.Vec(DAOProposal)], ['query']),
   'getGiftCardAnalytics' : IDL.Func([], [AnalyticsData], ['query']),
   'getGiftCardById' : IDL.Func([IDL.Text], [IDL.Opt(GiftCard)], ['query']),
   'getGiftCards' : IDL.Func([], [IDL.Vec(GiftCard)], ['query']),
   'getInvestorInquiries' : IDL.Func([], [IDL.Vec(InvestorInquiry)], ['query']),
   'getNetworkInfo' : IDL.Func([], [IDL.Text], ['query']),
+  'getOmniMeshStatus' : IDL.Func([], [OmniMeshStatus], ['query']),
   'getServices' : IDL.Func([], [IDL.Vec(Service)], ['query']),
   'getTokenomics' : IDL.Func([], [IDL.Opt(Tokenomics)], ['query']),
   'getTotalUsers' : IDL.Func([], [IDL.Nat], ['query']),
+  'getTreasuryStatus' : IDL.Func([], [TreasuryStatus], ['query']),
+  'getUniversalLaunchState' : IDL.Func([], [IDL.Bool], ['query']),
   'getUserById' : IDL.Func([IDL.Nat], [User], ['query']),
   'getUserProfile' : IDL.Func(
       [IDL.Principal],
@@ -290,6 +325,7 @@ export const idlService = IDL.Service({
     ),
   'getVessels' : IDL.Func([], [IDL.Vec(Vessel)], ['query']),
   'getVesselsByType' : IDL.Func([IDL.Text], [IDL.Vec(Vessel)], ['query']),
+  'getZkCurrentRoot' : IDL.Func([], [IDL.Text], ['query']),
   'healthCheck' : IDL.Func([], [IDL.Text], ['query']),
   'initializeAccessControl' : IDL.Func([], [], []),
   'initializeAdminAccessControl' : IDL.Func([IDL.Vec(IDL.Text)], [], []),
@@ -346,8 +382,10 @@ export const idlService = IDL.Service({
   'submitCareerInquiry' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
   'submitContactForm' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
   'submitInvestorInquiry' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
+  'toggleUniversalLaunch' : IDL.Func([], [], []),
   'updateGiftCardStatus' : IDL.Func([IDL.Text, Status], [], []),
   'validatePrincipal' : IDL.Func([IDL.Principal], [IDL.Bool], ['query']),
+  'voteOnProposal' : IDL.Func([IDL.Text, IDL.Bool], [], []),
 });
 
 export const idlInitArgs = [];
@@ -389,6 +427,12 @@ export const idlFactory = ({ IDL }) => {
     'crypto' : IDL.Null,
   });
   const Time = IDL.Int;
+  const AIStatus = IDL.Record({
+    'status' : IDL.Text,
+    'lastUpdated' : Time,
+    'error' : IDL.Opt(IDL.Text),
+    'currentTask' : IDL.Text,
+  });
   const User = IDL.Record({
     'id' : IDL.Nat,
     'name' : IDL.Text,
@@ -434,6 +478,16 @@ export const idlFactory = ({ IDL }) => {
     'email' : IDL.Text,
     'message' : IDL.Text,
     'timestamp' : Time,
+  });
+  const DAOProposal = IDL.Record({
+    'id' : IDL.Text,
+    'status' : IDL.Text,
+    'title' : IDL.Text,
+    'votesAgainst' : IDL.Nat,
+    'votesFor' : IDL.Nat,
+    'createdAt' : Time,
+    'votingDeadline' : Time,
+    'description' : IDL.Text,
   });
   const AnalyticsData = IDL.Record({
     'totalValue' : IDL.Nat,
@@ -527,6 +581,12 @@ export const idlFactory = ({ IDL }) => {
     'message' : IDL.Text,
     'timestamp' : Time,
   });
+  const OmniMeshStatus = IDL.Record({
+    'status' : IDL.Text,
+    'active' : IDL.Bool,
+    'nodes' : IDL.Nat,
+    'lastSync' : Time,
+  });
   const Service = IDL.Record({
     'id' : IDL.Text,
     'name' : IDL.Text,
@@ -542,6 +602,13 @@ export const idlFactory = ({ IDL }) => {
     'whitepaperLink' : IDL.Text,
     'governance' : IDL.Text,
     'symbol' : IDL.Text,
+  });
+  const TreasuryStatus = IDL.Record({
+    'currencyBreakdown' : IDL.Vec(IDL.Tuple(IDL.Text, IDL.Nat)),
+    'totalValue' : IDL.Nat,
+    'liquidity' : IDL.Float64,
+    'reserves' : IDL.Nat,
+    'lastAudit' : Time,
   });
   const Vessel = IDL.Record({
     'id' : IDL.Text,
@@ -615,6 +682,8 @@ export const idlFactory = ({ IDL }) => {
         [],
         [],
       ),
+    'generateZkSolvencyProof' : IDL.Func([], [IDL.Text], []),
+    'getAIStatus' : IDL.Func([], [AIStatus], ['query']),
     'getAllUsers' : IDL.Func([], [IDL.Vec(User)], ['query']),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
@@ -623,6 +692,7 @@ export const idlFactory = ({ IDL }) => {
     'getCompanyInfo' : IDL.Func([], [IDL.Opt(CompanyInfo)], ['query']),
     'getConnectionStatus' : IDL.Func([], [ConnectionStatus], ['query']),
     'getContactForms' : IDL.Func([], [IDL.Vec(ContactForm)], ['query']),
+    'getDaoProposals' : IDL.Func([], [IDL.Vec(DAOProposal)], ['query']),
     'getGiftCardAnalytics' : IDL.Func([], [AnalyticsData], ['query']),
     'getGiftCardById' : IDL.Func([IDL.Text], [IDL.Opt(GiftCard)], ['query']),
     'getGiftCards' : IDL.Func([], [IDL.Vec(GiftCard)], ['query']),
@@ -632,9 +702,12 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'getNetworkInfo' : IDL.Func([], [IDL.Text], ['query']),
+    'getOmniMeshStatus' : IDL.Func([], [OmniMeshStatus], ['query']),
     'getServices' : IDL.Func([], [IDL.Vec(Service)], ['query']),
     'getTokenomics' : IDL.Func([], [IDL.Opt(Tokenomics)], ['query']),
     'getTotalUsers' : IDL.Func([], [IDL.Nat], ['query']),
+    'getTreasuryStatus' : IDL.Func([], [TreasuryStatus], ['query']),
+    'getUniversalLaunchState' : IDL.Func([], [IDL.Bool], ['query']),
     'getUserById' : IDL.Func([IDL.Nat], [User], ['query']),
     'getUserProfile' : IDL.Func(
         [IDL.Principal],
@@ -643,6 +716,7 @@ export const idlFactory = ({ IDL }) => {
       ),
     'getVessels' : IDL.Func([], [IDL.Vec(Vessel)], ['query']),
     'getVesselsByType' : IDL.Func([IDL.Text], [IDL.Vec(Vessel)], ['query']),
+    'getZkCurrentRoot' : IDL.Func([], [IDL.Text], ['query']),
     'healthCheck' : IDL.Func([], [IDL.Text], ['query']),
     'initializeAccessControl' : IDL.Func([], [], []),
     'initializeAdminAccessControl' : IDL.Func([IDL.Vec(IDL.Text)], [], []),
@@ -699,8 +773,10 @@ export const idlFactory = ({ IDL }) => {
     'submitCareerInquiry' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
     'submitContactForm' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
     'submitInvestorInquiry' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
+    'toggleUniversalLaunch' : IDL.Func([], [], []),
     'updateGiftCardStatus' : IDL.Func([IDL.Text, Status], [], []),
     'validatePrincipal' : IDL.Func([IDL.Principal], [IDL.Bool], ['query']),
+    'voteOnProposal' : IDL.Func([IDL.Text, IDL.Bool], [], []),
   });
 };
 

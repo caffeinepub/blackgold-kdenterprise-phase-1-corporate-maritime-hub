@@ -1,52 +1,137 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "KD Platform Dashboard: Internet Identity guard + admin add-user UI with React Query refetch",
+  "title": "KD Platform: ICP-native NOC Dashboard (React + React Query + Actor calls)",
   "requirements": [
     {
-      "id": "REQ-9",
-      "summary": "Add an admin-only “Add user” form on the KD dashboard that calls the canister addUser method and refreshes Total Users.",
+      "id": "REQ-4",
+      "summary": "Add a new NOC dashboard route (/kd-platform/noc) with sections for AI, Treasury, DAO, ZK, Omni-mesh, and Universal Launch, using actor-backed React Query data.",
       "acceptanceCriteria": [
-        "Frontend: KD Dashboard shows an “Admin” section (only when the caller is an admin) with inputs for name and email and an “Add user” action.",
-        "After adding a user via the UI, the “Total Users” card updates (via React Query invalidation/refetch) and displays the new count.",
-        "Non-admin callers cannot add users (backend enforces authorization and frontend does not render the admin form)."
+        "A new page route exists and is reachable from the app router.",
+        "The page shows distinct UI sections for AI, Treasury, DAO, ZK, Omni-mesh, and Universal Launch.",
+        "All data displayed on the page is loaded via React Query hooks calling the backend actor.",
+        "User-facing strings on the new page are written in English."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useQueries.ts",
-          "operation": "modify",
-          "description": "Add React Query hooks for KD admin UX: a query hook to read admin status (calling the existing backend capability isCallerAdmin()) and a mutation hook to add a user (calling the existing backend capability addUser(name, email)) that invalidates/refetches the ['totalUsers'] query on success. Also adjust useTotalUsers to support an optional enabled flag so the dashboard can avoid querying when not signed in. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/kd/AdminAddUserCard.tsx",
+          "path": "frontend/src/pages/NOCPage.tsx",
           "operation": "create",
-          "description": "Create a KD dashboard Admin UI card that renders name/email inputs and an “Add user” button, using shadcn-ui components (Card, Button, Input, Label, Alert) for consistent styling, and calling the new hooks to submit and show success/error states. Verify the component's usage instructions before implementing."
+          "description": "Create the NOC dashboard page component that renders distinct cards/sections for AI Status, Treasury Metrics (including a formatted TVL string), DAO Proposals (list + vote buttons), ZK Root display + Generate Solvency Proof action, Omni-mesh status indicator, and a Universal Launch overlay trigger; ensure all user-facing copy is English and all data/actions come from React Query hooks (no REST fetch usage)."
         },
         {
-          "path": "frontend/src/pages/KDDashboardPage.tsx",
+          "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Wire the new AdminAddUserCard into the KD dashboard page: fetch admin status via the new hook and render the Admin section only when isCallerAdmin is true; ensure the add-user action triggers React Query invalidation so the Total Users card updates after a successful add. Verify the component's usage instructions before implementing."
+          "description": "Register the new React route at path '/kd-platform/noc' and wire it into the TanStack Router route tree so it is reachable from the app router."
+        },
+        {
+          "path": "frontend/src/components/noc/UniversalLaunchOverlay.tsx",
+          "operation": "create",
+          "description": "Implement/port a UniversalLaunchOverlay component used by the NOC page; it should read omni-mesh status and universal launch state via React Query hooks and trigger the universal launch action via a mutation hook (no fetch('/api/...'))."
         }
       ]
     },
     {
-      "id": "REQ-10",
-      "summary": "Guard the KD dashboard with an Internet Identity sign-in prompt and show friendly English messaging on unauthorized access.",
+      "id": "REQ-5",
+      "summary": "Add NOC React Query hooks in useQueries.ts for AI/Treasury/DAO/ZK/Omni-mesh/Universal Launch actor calls, following existing queryKey and invalidation patterns.",
       "acceptanceCriteria": [
-        "If the user is not authenticated/authorized to call `getTotalUsers()`, the KD dashboard displays a friendly sign-in prompt in English instead of a generic error.",
-        "After signing in, the dashboard loads and displays the live total user count.",
-        "No changes are made to immutable hook files (Internet Identity hooks remain unmodified)."
+        "NOC-related hooks exist in useQueries.ts and compile in TypeScript.",
+        "DAO vote mutation invalidates the proposals query so vote totals refresh.",
+        "ZK proof generation invalidates/refetches current root so the UI updates after generation.",
+        "Hooks handle unauthenticated/unauthorized errors consistently with existing patterns."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/KDDashboardPage.tsx",
+          "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Add an Internet Identity guard to the KD dashboard: use the existing useInternetIdentity hook (without modifying it) to detect authentication state; when not authenticated, render a clear English sign-in prompt with a Login button (calling login) instead of querying protected dashboard data. When authenticated, load total users; if the backend call fails due to authorization (e.g., trap message indicating unauthorized), replace the generic error UI with the same friendly sign-in/authorization message. Use the authorization component guidance to present an AccessDenied-style experience for unauthorized callers, and use shadcn-ui components (Button/Alert/Card) for consistent UI. Verify the component's usage instructions before implementing."
+          "description": "Add NOC hooks: useGetAIStatus, useGetTreasuryStatus, useGetDaoProposals, useVoteOnProposal, useGetZkCurrentRoot, useGenerateZkSolvencyProof, useGetOmniMeshStatus, and useStartUniversalLaunch (mapping to the backend universal launch method) using the existing useActor hook and React Query patterns (enabled gating on actor/isFetching, queryKey naming, and invalidation for proposals/root/state after mutations)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Add an admin-only NOC Admin section on the NOC page for Principal-based user add/remove and universal launch/black-hole mode toggle, visible only when backend reports the caller is admin.",
+      "acceptanceCriteria": [
+        "When isAdmin is true, the NOC Admin section is visible; otherwise it is hidden.",
+        "Admin can add/remove a Principal and see user count update (or a success message).",
+        "Universal launch / black-hole toggle controls are disabled/hidden for non-admin users."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/noc/NOCAdminSection.tsx",
+          "operation": "create",
+          "description": "Create an admin-only NOC Admin UI section component with: (1) Principal text input + Add/Remove actions, and (2) universal launch/black-hole mode toggle controls; use React Query mutation hooks and show success/error feedback in English; ensure non-admin users never see the section."
+        },
+        {
+          "path": "frontend/src/pages/NOCPage.tsx",
+          "operation": "modify",
+          "description": "Wire the NOC Admin section into the NOC page, rendering it only when the backend-derived admin check (React Query hook calling the actor) indicates the caller is admin; ensure the universal launch toggle controls are not rendered for non-admin users."
         },
         {
           "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Ensure the Total Users query can be disabled until the user is authenticated (and/or until the dashboard guard allows protected data fetching) to prevent avoidable unauthorized errors. Verify the component's usage instructions before implementing."
+          "description": "Add admin-focused NOC hooks required by the NOC Admin section (e.g., useNocAddUserByPrincipal, useNocRemoveUserByPrincipal, useNocGetUserCount, and useNocIsAdmin-style checks), aligning with existing queryKey/invalidation patterns; implement invalidation so user count/related admin UI refreshes after add/remove."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Port NOC UI components (ComplianceShield, InstitutionalConsole, UniversalLaunchOverlay) into the React+Tailwind app and update any unsupported dependencies to use actor + React Query hooks.",
+      "acceptanceCriteria": [
+        "Components compile and render inside the current React app.",
+        "UniversalLaunchOverlay reads omni-mesh status via backend actor calls (not hardcoded REST fetch).",
+        "UniversalLaunchOverlay triggers a backend method for “startUniversalLaunch” (or equivalent) and updates UI state accordingly."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/noc/ComplianceShield.tsx",
+          "operation": "create",
+          "description": "Port/create the ComplianceShield component as a React component styled with the existing Tailwind setup and shadcn/ui primitives where appropriate; ensure it integrates cleanly into the existing app component patterns. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/noc/InstitutionalConsole.tsx",
+          "operation": "create",
+          "description": "Port/create the InstitutionalConsole component as a React component; replace any prior REST/proxy assumptions with props and/or React Query hook data supplied by the NOC page. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/noc/UniversalLaunchOverlay.tsx",
+          "operation": "modify",
+          "description": "Update/complete the UniversalLaunchOverlay to remove any unsupported dependencies (e.g., getNOCActor, fetch('/api/...')) and instead use the existing actor + React Query hooks for omni-mesh status and universal launch actions/state; ensure UI updates after actions via query invalidation/refetch. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/NOCPage.tsx",
+          "operation": "modify",
+          "description": "Render the ported NOC components (ComplianceShield, InstitutionalConsole, UniversalLaunchOverlay) within the NOC dashboard page and connect them to the appropriate hook-driven data/actions so there are no orphan components."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Add navigation entry (desktop + mobile) to reach /kd-platform/noc while keeping existing routes intact and without modifying immutable paths.",
+      "acceptanceCriteria": [
+        "A user can navigate to the NOC page from the main navigation on desktop and mobile.",
+        "Existing navigation items and KD Platform routes continue to function."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Layout.tsx",
+          "operation": "modify",
+          "description": "Add a new navigation item (desktop + mobile) that routes to '/kd-platform/noc' and update active-state logic so KD Platform highlighting includes the new NOC route, without changing any existing route paths."
+        }
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "summary": "Update project documentation to describe ICP-native (dfx-based) deployment and verification for NOC methods, without relying on Vercel/Node proxy routes.",
+      "acceptanceCriteria": [
+        "README includes dfx-based deploy and verification commands for the NOC methods.",
+        "No requirement depends on Vercel-proxied /api/noc/* endpoints to function.",
+        "The documented verification commands correspond to actual backend methods implemented in this build."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/README.md",
+          "operation": "create",
+          "description": "Add/update a frontend-scoped README section documenting ICP-native (dfx-based) deployment for the frontend + single canister, and how to verify NOC capabilities using 'dfx canister call' against the candid-exposed methods (avoid any Vercel-proxy /api/noc/* instructions)."
         }
       ]
     }

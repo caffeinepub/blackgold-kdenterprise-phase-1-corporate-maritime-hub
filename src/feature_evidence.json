@@ -2,12 +2,127 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-add-a-minimal-admin-only-user-management-workflow-that-replaces-the-user-s-requested-web2-register-login-approach-expose-an-admin-only-canister-method-to-add-users-name-email-and-a-frontend-form-on-the-kd-dashboard-to-call-it",
-      "featureTitle": "Add a minimal admin-only user management workflow that replaces the user’s requested Web2 register/login approach: expose an admin-only canister method to add users (name + email) and a frontend form on the KD dashboard to call it.",
+      "featureId": "feature-create-a-new-react-route-under-the-existing-app-e-g-kd-platform-noc-that-renders-a-noc-dashboard-page-with-cards-sections-for-ai-status-treasury-metrics-including-tvl-string-dao-proposals-list-vote-buttons-zk-root-display-generate-solvency-proof-action-omni-mesh-status-indicator-and-universal-launch-overlay-trigger-all-user-facing-text-must-be-english",
+      "featureTitle": "Create a new React route under the existing app (e.g., /kd-platform/noc) that renders a NOC dashboard page with cards/sections for: AI Status, Treasury Metrics (including TVL string), DAO Proposals (list + vote buttons), ZK Root display + “Generate Solvency Proof” action, Omni-mesh status indicator, and Universal Launch overlay trigger. All user-facing text must be English.",
       "files": [
-        "frontend/src/components/kd/AdminAddUserCard.tsx",
+        "frontend/src/App.tsx",
+        "frontend/src/components/noc/UniversalLaunchOverlay.tsx",
+        "frontend/src/pages/NOCPage.tsx"
+      ],
+      "components": [
+        "blob-storage@2.0.3",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "qr-code@1.0.0",
+        "camera@1.0.0",
+        "authorization@1.0.1",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-react-query-hooks-in-frontend-src-hooks-usequeries-ts-to-support-the-noc-dashboard-getaistatus-gettreasurystatus-getdaoproposals-voteonproposal-getzkcurrentroot-generatezksolvencyproof-getomnimeshstatus-and-startuniversallaunch-or-equivalent-hooks-must-use-the-existing-useactor-hook-and-follow-current-querykey-invalidation-patterns",
+      "featureTitle": "Add React Query hooks in frontend/src/hooks/useQueries.ts to support the NOC dashboard: getAIStatus, getTreasuryStatus, getDaoProposals, voteOnProposal, getZkCurrentRoot, generateZkSolvencyProof, getOmniMeshStatus, and startUniversalLaunch (or equivalent). Hooks must use the existing useActor hook and follow current queryKey/invalidation patterns.",
+      "files": [
+        "frontend/src/hooks/useQueries.ts"
+      ],
+      "components": [
+        "blob-storage@2.0.3",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "qr-code@1.0.0",
+        "camera@1.0.0",
+        "authorization@1.0.1",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-an-admin-only-noc-admin-section-within-the-noc-page-that-allows-1-adding-removing-a-user-by-principal-principal-text-input-and-2-toggling-universal-launch-black-hole-mode-state-if-implemented-this-section-must-only-render-when-the-caller-is-an-admin-as-determined-by-the-backend",
+      "featureTitle": "Add an admin-only “NOC Admin” section within the NOC page that allows: (1) adding/removing a user by Principal (principal text input), and (2) toggling universal launch / black-hole mode state (if implemented). This section must only render when the caller is an admin as determined by the backend.",
+      "files": [
+        "frontend/src/components/noc/NOCAdminSection.tsx",
         "frontend/src/hooks/useQueries.ts",
-        "frontend/src/pages/KDDashboardPage.tsx"
+        "frontend/src/pages/NOCPage.tsx"
+      ],
+      "components": [
+        "blob-storage@2.0.3",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "qr-code@1.0.0",
+        "camera@1.0.0",
+        "authorization@1.0.1",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-port-the-provided-noc-ui-components-into-the-existing-react-tailwind-app-as-new-components-do-not-use-standalone-html-pages-complianceshield-institutionalconsole-and-universallaunchoverlay-update-any-unsupported-dependencies-e-g-undefined-getnocactor-or-fetch-api-to-use-the-existing-actor-react-query-hooks-instead",
+      "featureTitle": "Port the provided NOC UI components into the existing React+Tailwind app as new components (do not use standalone HTML pages): ComplianceShield, InstitutionalConsole, and UniversalLaunchOverlay. Update any unsupported dependencies (e.g., undefined getNOCActor or fetch('/api/...')) to use the existing actor + React Query hooks instead.",
+      "files": [
+        "frontend/src/components/noc/ComplianceShield.tsx",
+        "frontend/src/components/noc/InstitutionalConsole.tsx",
+        "frontend/src/components/noc/UniversalLaunchOverlay.tsx",
+        "frontend/src/pages/NOCPage.tsx"
+      ],
+      "components": [
+        "blob-storage@2.0.3",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "qr-code@1.0.0",
+        "camera@1.0.0",
+        "authorization@1.0.1",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-navigation-entry-to-reach-the-new-noc-route-from-the-existing-site-navigation-desktop-and-mobile-without-modifying-any-immutable-frontend-paths-keep-existing-kd-platform-routes-intact",
+      "featureTitle": "Add a navigation entry to reach the new NOC route from the existing site navigation (desktop and mobile) without modifying any immutable frontend paths. Keep existing KD Platform routes intact.",
+      "files": [
+        "frontend/src/components/Layout.tsx"
+      ],
+      "components": [
+        "blob-storage@2.0.3",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "qr-code@1.0.0",
+        "camera@1.0.0",
+        "authorization@1.0.1",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-8"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-project-configuration-and-documentation-updates-to-reflect-an-icp-native-deployment-dfx-based-rather-than-vercel-node-proxy-routes-provide-update-a-readme-section-describing-how-to-deploy-the-single-backend-canister-and-the-frontend-and-how-to-verify-noc-endpoints-using-dfx-canister-call-do-not-add-vercel-only-deployment-steps",
+      "featureTitle": "Add project configuration and documentation updates to reflect an ICP-native deployment (dfx-based) rather than Vercel/Node proxy routes: provide/update a README section describing how to deploy the single backend canister and the frontend, and how to verify NOC endpoints using dfx canister call. Do not add Vercel-only deployment steps.",
+      "files": [
+        "frontend/README.md"
       ],
       "components": [
         "blob-storage@2.0.3",
@@ -22,29 +137,6 @@
       ],
       "testIds": [
         "REQ-9"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-a-kd-platform-dashboard-guard-that-prompts-the-user-to-authenticate-with-internet-identity-before-loading-protected-kd-dashboard-data-using-clear-english-user-facing-messaging",
-      "featureTitle": "Add a KD Platform dashboard guard that prompts the user to authenticate with Internet Identity before loading protected KD dashboard data, using clear English user-facing messaging.",
-      "files": [
-        "frontend/src/hooks/useQueries.ts",
-        "frontend/src/pages/KDDashboardPage.tsx"
-      ],
-      "components": [
-        "blob-storage@2.0.3",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "qr-code@1.0.0",
-        "camera@1.0.0",
-        "authorization@1.0.1",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-10"
       ],
       "confidence": "high"
     }

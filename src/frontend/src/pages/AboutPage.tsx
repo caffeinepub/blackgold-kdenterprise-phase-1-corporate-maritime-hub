@@ -1,10 +1,10 @@
 import { Card, CardContent } from '@/components/ui/card';
-import { useCompanyInfo } from '@/hooks/useQueries';
+import { useGetCompanyInfo } from '@/hooks/useQueries';
 import { Award, Shield, Globe, TrendingUp, Loader2 } from 'lucide-react';
 import { OptimizedImage } from '@/components/OptimizedImage';
 
 export default function AboutPage() {
-  const { data: companyInfo, isLoading } = useCompanyInfo();
+  const { data: companyInfo, isLoading } = useGetCompanyInfo();
 
   if (isLoading) {
     return (

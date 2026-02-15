@@ -1,12 +1,17 @@
 # Specification
 
 ## Summary
-**Goal:** Make the KD Platform dashboard work reliably on fresh ICP deployments by seeding an initial user in the Motoko canister, adding an admin-only “add user” workflow, and gating dashboard data behind Internet Identity with clear English prompts.
+**Goal:** Integrate the KD.WebAI NOC v13.0 “Singularity Protocol” features into the existing ICP-native KD Platform (single Motoko canister + React app), exposing new canister methods and a new NOC dashboard route.
 
 **Planned changes:**
-- Backend (Motoko canister): add idempotent initialization seeding so `getTotalUsers()` returns >= 1 after first setup, without duplicating or modifying existing users.
-- Backend (Motoko canister): add an admin-only method to create a user record (name + email) and update the stored total user count.
-- Frontend (KD dashboard): add an admin-only “Admin” section with name/email inputs and an “Add user” action that calls the canister method and refreshes the “Total Users” card via refetch/invalidation.
-- Frontend (KD dashboard): add an auth/authorization guard that prompts users (in English) to sign in with Internet Identity when they are not allowed to load protected dashboard data.
+- Add an ICP-native NOC domain to the existing Motoko single-actor canister (backend/main.mo) with candid-exposed methods for AI status, DAO proposals + voting, treasury status, ZK solvency proof generation + current root, omni-mesh status, and a universal launch state toggle.
+- Persist NOC state in stable, upgrade-safe storage (AI/Treasury status, DAO proposals + votes, ZK root + last proof time, omni-mesh status, universal launch/black-hole flags) and add a conditional migration module only if needed to preserve existing state across upgrades.
+- Implement principal-based RBAC and a user registry (admin principal via init; register; admin-only addUser/removeUser; getUserCount; getUser; isAdmin) without breaking existing dashboard AccessControl/Users flows.
+- Add a new React route (e.g., `/kd-platform/noc`) that renders a NOC dashboard page with sections/cards for AI Status, Treasury Metrics (including TVL string), DAO Proposals (list + vote buttons), ZK Root + “Generate Solvency Proof”, Omni-mesh status, and a Universal Launch overlay trigger (English text only).
+- Add React Query hooks in `frontend/src/hooks/useQueries.ts` for NOC data/actions using the existing actor flow: getAIStatus, getTreasuryStatus, getDaoProposals, voteOnProposal (invalidate proposals), getZkCurrentRoot, generateZkSolvencyProof (refetch root), getOmniMeshStatus, startUniversalLaunch (or equivalent).
+- Add an admin-only “NOC Admin” section on the NOC page (rendered only when backend isAdmin is true) to add/remove users by Principal and toggle universal launch/black-hole mode state.
+- Port NOC UI components into the existing React+Tailwind app as components (ComplianceShield, InstitutionalConsole, UniversalLaunchOverlay), replacing any REST fetches or undefined actor helpers with the existing actor + React Query hooks.
+- Add a navigation entry (desktop and mobile) to reach the NOC route while keeping existing KD Platform routes intact.
+- Update project documentation/config to reflect ICP-native (dfx-based) deployment and verification via `dfx canister call`, without requiring Vercel/Node proxy routes.
 
-**User-visible outcome:** On a new deployment the dashboard no longer shows 0 users by default; admins can sign in with Internet Identity and add users from the dashboard, and non-authenticated/non-admin users see a clear English sign-in prompt instead of errors.
+**User-visible outcome:** Users can navigate to a new NOC dashboard within the KD Platform to view AI/treasury/DAO/ZK/omni-mesh status, vote on proposals, generate ZK solvency proofs, and trigger universal launch; admins can manage users by Principal and access admin-only launch controls.

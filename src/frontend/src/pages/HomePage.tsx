@@ -1,13 +1,13 @@
 import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { useCompanyInfo } from '@/hooks/useQueries';
+import { useGetCompanyInfo } from '@/hooks/useQueries';
 import { Ship, Users, Globe, Calendar, ArrowRight } from 'lucide-react';
 import { OptimizedImage } from '@/components/OptimizedImage';
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const { data: companyInfo, isLoading } = useCompanyInfo();
+  const { data: companyInfo, isLoading } = useGetCompanyInfo();
 
   const metrics = [
     {

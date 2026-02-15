@@ -12,6 +12,7 @@ import CryptoTokensPage from './pages/CryptoTokensPage';
 import GiftCardSystemPage from './pages/GiftCardSystemPage';
 import KDPlatformLandingPage from './pages/KDPlatformLandingPage';
 import KDDashboardPage from './pages/KDDashboardPage';
+import NOCPage from './pages/NOCPage';
 
 const rootRoute = createRootRoute({
   component: Layout,
@@ -77,6 +78,12 @@ const kdDashboardRoute = createRoute({
   component: KDDashboardPage,
 });
 
+const nocRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/kd-platform/noc',
+  component: NOCPage,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   servicesRoute,
@@ -88,6 +95,7 @@ const routeTree = rootRoute.addChildren([
   giftCardSystemRoute,
   kdPlatformRoute,
   kdDashboardRoute,
+  nocRoute,
 ]);
 
 const router = createRouter({ routeTree });

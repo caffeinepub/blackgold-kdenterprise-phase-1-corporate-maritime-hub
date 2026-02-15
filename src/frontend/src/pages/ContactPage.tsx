@@ -4,12 +4,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { useCompanyInfo, useSubmitContactForm } from '@/hooks/useQueries';
+import { useGetCompanyInfo, useSubmitContactForm } from '@/hooks/useQueries';
 import { MapPin, Phone, Mail, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function ContactPage() {
-  const { data: companyInfo, isLoading } = useCompanyInfo();
+  const { data: companyInfo, isLoading } = useGetCompanyInfo();
   const submitContactForm = useSubmitContactForm();
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
 
@@ -256,11 +256,22 @@ export default function ContactPage() {
                 </CardHeader>
                 <CardContent className="space-y-4 text-maritime-blue-light">
                   <p>
-                    While our headquarters is located in Delaware, USA, we maintain operational offices and representatives in key maritime hubs worldwide.
+                    While our headquarters is located in Delaware, USA, we maintain operational offices in key maritime hubs worldwide.
                   </p>
-                  <p>
-                    Our 24/7 operations center ensures continuous support for our fleet and crew across all time zones.
-                  </p>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-maritime-gold" />
+                      <span>Singapore - Asia Pacific Hub</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-maritime-gold" />
+                      <span>Rotterdam - European Operations</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-maritime-gold" />
+                      <span>Dubai - Middle East Center</span>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -272,19 +283,26 @@ export default function ContactPage() {
       <section className="py-16">
         <div className="container">
           <div className="mx-auto max-w-4xl">
-            <Card className="overflow-hidden border-maritime-border bg-maritime-card">
-              <div className="aspect-video w-full bg-maritime-navy/10">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3067.8!2d-75.7!3d39.45!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMznCsDI3JzAwLjAiTiA3NcKwNDInMDAuMCJX!5e0!3m2!1sen!2sus!4v1234567890"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="Office Location"
-                />
-              </div>
+            <Card className="border-maritime-border bg-maritime-card overflow-hidden">
+              <CardHeader>
+                <CardTitle className="text-center text-maritime-navy dark:text-maritime-gold">
+                  Our Location
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="aspect-video w-full">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3067.8977!2d-75.7163!3d39.6495!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c703e4b1c1c1c1%3A0x1234567890abcdef!2s651%20N%20Broad%20St%20%23206%2C%20Middletown%2C%20DE%2019709!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="Blackgold Kdenterprise Location"
+                  />
+                </div>
+              </CardContent>
             </Card>
           </div>
         </div>

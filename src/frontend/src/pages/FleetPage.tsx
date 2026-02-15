@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useVessels } from '@/hooks/useQueries';
+import { useGetVessels } from '@/hooks/useQueries';
 import { Loader2, Ship } from 'lucide-react';
 import { OptimizedImage } from '@/components/OptimizedImage';
 
 export default function FleetPage() {
-  const { data: vessels, isLoading } = useVessels();
+  const { data: vessels, isLoading } = useGetVessels();
   const [selectedType, setSelectedType] = useState<string>('all');
 
   const vesselTypes = ['all', 'cargo', 'tanker', 'supply'];

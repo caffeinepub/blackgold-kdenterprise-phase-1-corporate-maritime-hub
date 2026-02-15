@@ -43,7 +43,7 @@ export default function Layout() {
   };
 
   const isCompanyActive = currentPath === '/about' || currentPath === '/crypto-tokens' || currentPath === '/gift-card-system';
-  const isKDPlatformActive = currentPath === '/kd-platform' || currentPath === '/kd-platform/dashboard';
+  const isKDPlatformActive = currentPath === '/kd-platform' || currentPath === '/kd-platform/dashboard' || currentPath === '/kd-platform/noc';
 
   return (
     <div className="flex min-h-screen flex-col">
