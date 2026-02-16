@@ -13,6 +13,7 @@ import GiftCardSystemPage from './pages/GiftCardSystemPage';
 import KDPlatformLandingPage from './pages/KDPlatformLandingPage';
 import KDDashboardPage from './pages/KDDashboardPage';
 import NOCPage from './pages/NOCPage';
+import UniversalLaunchReportPage from './pages/UniversalLaunchReportPage';
 
 const rootRoute = createRootRoute({
   component: Layout,
@@ -84,6 +85,12 @@ const nocRoute = createRoute({
   component: NOCPage,
 });
 
+const universalLaunchReportRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/kd-platform/universal-launch-report',
+  component: UniversalLaunchReportPage,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   servicesRoute,
@@ -96,6 +103,7 @@ const routeTree = rootRoute.addChildren([
   kdPlatformRoute,
   kdDashboardRoute,
   nocRoute,
+  universalLaunchReportRoute,
 ]);
 
 const router = createRouter({ routeTree });

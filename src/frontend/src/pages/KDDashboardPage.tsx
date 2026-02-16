@@ -2,7 +2,7 @@ import { useInternetIdentity } from '../hooks/useInternetIdentity';
 import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2 } from 'lucide-react';
+import { Loader2, FileText } from 'lucide-react';
 import { useGetTotalUsers, useIsCallerAdmin } from '@/hooks/useQueries';
 import AdminAddUserCard from '../components/kd/AdminAddUserCard';
 
@@ -101,6 +101,27 @@ export default function KDDashboardPage() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Universal Launch Report Navigation */}
+        <Card className="bg-kd-panel border-kd-panel-border">
+          <CardHeader>
+            <CardTitle className="text-kd-text flex items-center gap-2">
+              <FileText className="w-5 h-5" />
+              Universal Launch Report
+            </CardTitle>
+            <CardDescription className="text-kd-text-muted">
+              View live system metrics, treasury status, DAO proposals, and network performance
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button
+              onClick={() => navigate({ to: '/kd-platform/universal-launch-report' })}
+              className="bg-kd-neon text-kd-bg hover:bg-kd-neon/90"
+            >
+              Open Universal Launch Report
+            </Button>
+          </CardContent>
+        </Card>
 
         {!adminLoading && isAdmin && <AdminAddUserCard />}
       </div>

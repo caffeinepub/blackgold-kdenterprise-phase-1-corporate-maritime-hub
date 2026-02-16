@@ -1,207 +1,128 @@
 {
   "kind": "build_request",
-  "title": "Integrate KD.WebAI NOC v13.0 “Singularity Protocol” into KD Platform (ICP-native)",
+  "title": "Add Universal Launch Report tab with live canister metrics",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Implement an ICP-native “NOC” domain in the existing Motoko single-actor canister (backend/main.mo) that provides: (1) AI status query, (2) DAO proposals query + vote update, (3) Treasury status query, (4) ZK solvency proof generation + current root query, (5) Omni-mesh status query, and (6) a “universal launch” state toggle. All new public methods must be reachable via the existing frontend actor/declarations flow (no separate canisters, no REST-only endpoints).",
-      "target": "backend",
+      "text": "Create a new authenticated Universal Launch Report page/component in the KD Platform area that renders a “KD.WebAI NOC v13.1 - Universal Launch Report” view similar to the user-provided React example, using the existing KD/NOC Tailwind styling tokens (e.g., bg-kd-bg, bg-kd-panel, text-kd-text) and English-only user-facing text.",
+      "target": "frontend",
       "source": {
         "messageIds": [
           "msg-1"
         ],
         "quotes": [
-          "Add in kd platform  \nKD.WEBAI NOC v13.0 – COMPLETE A–Z PRODUCTION PACKAGE"
+          "I'll integrate this page into your existing React dashboard as a new Universal Launch Report tab, while also making it fetch live data from your deployed canisters using the ICP JavaScript agent."
         ]
       },
       "acceptanceCriteria": [
-        "A new set of candid-exposed methods exists on the existing backend canister for AI/DAO/Treasury/ZK/Omni-mesh/Universal Launch.",
-        "Methods are implemented in backend/main.mo (single-actor architecture preserved).",
-        "Frontend can call these methods through the generated declarations (no fetch('/api/...') required to make the UI work)."
+        "A new report UI is available as a React component/page and visually matches the existing KD/NOC styling (kd-* classes) rather than raw default Tailwind grays.",
+        "All user-facing strings on the report page are in English.",
+        "The page requires Internet Identity authentication (same gating behavior as KDDashboardPage/NOCPage)."
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Add persistent, upgrade-safe NOC state in the backend (stable storage) for: AIStatus, TreasuryStatus, DAO proposal list + vote counts, ZK current root + last proof time, omni-mesh status, and universal launch/black-hole mode flags. If any current in-memory vars would be lost on upgrade, add a conditional backend/migration.mo to preserve/transform state without breaking existing data.",
-      "target": "backend",
+      "text": "Add a new route for the Universal Launch Report under the existing TanStack Router configuration (frontend/src/App.tsx) and add an in-app navigation entry from the KD Platform dashboard so users can open the report as a new tab/page in the dashboard flow.",
+      "target": "frontend",
       "source": {
         "messageIds": [
           "msg-1"
         ],
         "quotes": [
-          "This document contains the entire source code, configuration, and deployment instructions for the KD.WebAI NOC v13.0 \"Singularity Protocol\""
+          "Add the Tab to Your Router",
+          "Add a navigation link in your sidebar or header."
         ]
       },
       "acceptanceCriteria": [
-        "After upgrading the canister, previously set NOC state values (e.g., votes, currentRoot, launch flag) remain intact.",
-        "If migration.mo is introduced, it is conditional and does not run when not needed.",
-        "Existing app features continue to operate (e.g., existing dashboard user count calls still succeed)."
+        "A new TanStack Router route exists for the report page (do not use react-router-dom <Route>).",
+        "KD Platform Dashboard (frontend/src/pages/KDDashboardPage.tsx) includes a navigation control that routes to the report page.",
+        "Navigation works in both desktop and mobile layouts without breaking existing routes (/kd-platform/dashboard, /kd-platform/noc)."
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Implement principal-based RBAC and user registry functions in the existing backend to mirror the NOC “Sovereign Core (RBAC)” intent: support an admin principal (configured via initialization), register caller, admin-only addUser/removeUser by Principal, getUserCount, getUser(principal), and isAdmin(principal). These must be additive and must not remove or break existing AccessControl/Users-based functionality already used by the current KD dashboard.",
-      "target": "backend",
+      "text": "Fetch and display live data on the Universal Launch Report page using the existing React Query hooks/actor flow (frontend/src/hooks/useQueries.ts + useActor), including: treasury status/TVL (from getTreasuryStatus), Omni-Mesh status (from getOmniMeshStatus), cycles balance (new query), and DAO proposals (from getDaoProposals). Configure polling/refresh every 10 seconds for these report metrics.",
+      "target": "frontend",
       "source": {
         "messageIds": [
           "msg-1"
         ],
         "quotes": [
-          "backend/main.mo – Sovereign Core (RBAC)",
-          "public shared(msg) func addUser(user: Principal) : async Bool",
-          "public shared(msg) func removeUser(user: Principal) : async Bool",
-          "public query func getUserCount() : async Nat",
-          "public query func isAdmin(p: Principal) : async Bool"
+          "refresh every 10s",
+          "Fetch TVL from treasury canister",
+          "Fetch proposals from DAO",
+          "Fetch mesh status"
         ]
       },
       "acceptanceCriteria": [
-        "Backend exposes principal-based methods equivalent to: register(), addUser(Principal), removeUser(Principal), getUserCount(), getUser(Principal), isAdmin(Principal).",
-        "Admin-only enforcement is implemented for addUser/removeUser.",
-        "Existing name/email-based admin add user flow continues to work as-is (no breaking changes)."
+        "The report page uses React Query (not manual setInterval state management) to load the required metrics via the backend actor.",
+        "The report metrics automatically refresh at least every 10 seconds while the page is open.",
+        "Loading and error states are handled (e.g., a loading indicator and a non-crashing error message/log) and the page remains usable if one metric fails.",
+        "DAO proposals render as a list using the live proposal fields returned by getDaoProposals (id/title/description/votes)."
       ]
     },
     {
       "id": "REQ-4",
-      "text": "Create a new React route under the existing app (e.g., /kd-platform/noc) that renders a NOC dashboard page with cards/sections for: AI Status, Treasury Metrics (including TVL string), DAO Proposals (list + vote buttons), ZK Root display + “Generate Solvency Proof” action, Omni-mesh status indicator, and Universal Launch overlay trigger. All user-facing text must be English.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "frontend/dashboard.html – User Dashboard",
-          "Sample API Routes (proxied via frontend): · GET /api/noc/ai · GET /api/noc/dao/proposals · POST /api/noc/dao/vote · GET /api/noc/treasury · GET /api/noc/omni-mesh",
-          "frontend/components/UniversalLaunchOverlay.tsx"
-        ]
-      },
-      "acceptanceCriteria": [
-        "A new page route exists and is reachable from the app router.",
-        "The page shows distinct UI sections for AI, Treasury, DAO, ZK, Omni-mesh, and Universal Launch.",
-        "All data displayed on the page is loaded via React Query hooks calling the backend actor.",
-        "User-facing strings on the new page are written in English."
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "text": "Add React Query hooks in frontend/src/hooks/useQueries.ts to support the NOC dashboard: getAIStatus, getTreasuryStatus, getDaoProposals, voteOnProposal, getZkCurrentRoot, generateZkSolvencyProof, getOmniMeshStatus, and startUniversalLaunch (or equivalent). Hooks must use the existing useActor hook and follow current queryKey/invalidation patterns.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "Sample API Routes (proxied via frontend)",
-          "backend/ai.mo – AI Status",
-          "backend/dao.mo – DAO Proposals & Voting",
-          "backend/treasury.mo – Treasury & Chain Fusion",
-          "backend/zk.mo – ZK‑Solvency Proof Layer"
-        ]
-      },
-      "acceptanceCriteria": [
-        "NOC-related hooks exist in useQueries.ts and compile in TypeScript.",
-        "DAO vote mutation invalidates the proposals query so vote totals refresh.",
-        "ZK proof generation invalidates/refetches current root so the UI updates after generation.",
-        "Hooks handle unauthenticated/unauthorized errors consistently with existing patterns."
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "text": "Add an admin-only “NOC Admin” section within the NOC page that allows: (1) adding/removing a user by Principal (principal text input), and (2) toggling universal launch / black-hole mode state (if implemented). This section must only render when the caller is an admin as determined by the backend.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "frontend/admin.html – Admin Panel",
-          "User Management: Principal input + Add/Remove",
-          "scripts/engage_black_hole.sh – Controller Handover"
-        ]
-      },
-      "acceptanceCriteria": [
-        "When isAdmin is true, the NOC Admin section is visible; otherwise it is hidden.",
-        "Admin can add/remove a Principal and see user count update (or a success message).",
-        "Universal launch / black-hole toggle controls are disabled/hidden for non-admin users."
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "text": "Port the provided NOC UI components into the existing React+Tailwind app as new components (do not use standalone HTML pages): ComplianceShield, InstitutionalConsole, and UniversalLaunchOverlay. Update any unsupported dependencies (e.g., undefined getNOCActor or fetch('/api/...')) to use the existing actor + React Query hooks instead.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "frontend/components/ComplianceShield.tsx",
-          "frontend/components/InstitutionalConsole.tsx",
-          "frontend/components/UniversalLaunchOverlay.tsx",
-          "const res = await fetch('/api/noc/omni-mesh');",
-          "const actor = await getNOCActor(); // defined elsewhere"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Components compile and render inside the current React app.",
-        "UniversalLaunchOverlay reads omni-mesh status via backend actor calls (not hardcoded REST fetch).",
-        "UniversalLaunchOverlay triggers a backend method for “startUniversalLaunch” (or equivalent) and updates UI state accordingly."
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "text": "Add a navigation entry to reach the new NOC route from the existing site navigation (desktop and mobile) without modifying any immutable frontend paths. Keep existing KD Platform routes intact.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "Add in kd platform"
-        ]
-      },
-      "acceptanceCriteria": [
-        "A user can navigate to the NOC page from the main navigation on desktop and mobile.",
-        "Existing navigation items and KD Platform routes continue to function."
-      ]
-    },
-    {
-      "id": "REQ-9",
-      "text": "Add project configuration and documentation updates to reflect an ICP-native deployment (dfx-based) rather than Vercel/Node proxy routes: provide/update a README section describing how to deploy the single backend canister and the frontend, and how to verify NOC endpoints using dfx canister call. Do not add Vercel-only deployment steps.",
+      "text": "Expose a backend query method to return the canister cycles balance, and wire it into the frontend report. Add a new public query function on the existing single Motoko actor (backend/main.mo) that returns cycles balance, gated with the same RBAC pattern used by other NOC query methods.",
       "target": "both",
       "source": {
         "messageIds": [
           "msg-1"
         ],
         "quotes": [
-          "dfx.json",
-          "scripts/deploy.sh – Full Mainnet Deployment",
-          "vercel.json",
-          "Live API Endpoints (After Deployment)",
-          "Post‑Deployment Verification"
+          "Ensure Your Canister Interfaces Expose the Required Methods",
+          "public query func getCyclesBalance() : async Nat { Cycles.balance() }"
         ]
       },
       "acceptanceCriteria": [
-        "README includes dfx-based deploy and verification commands for the NOC methods.",
-        "No requirement depends on Vercel-proxied /api/noc/* endpoints to function.",
-        "The documented verification commands correspond to actual backend methods implemented in this build."
+        "backend/main.mo defines a new query method getCyclesBalance that returns the canister’s current cycles balance and enforces user-level access (same AccessControl.hasPermission(..., #user) pattern as getTreasuryStatus/getOmniMeshStatus).",
+        "Frontend compiles and can call getCyclesBalance via the typed actor bindings without TypeScript errors.",
+        "No state migration (backend/migration.mo) is introduced/required for this change."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Update the frontend’s canister/type bindings so the new backend method (getCyclesBalance) is available to TypeScript imports already used in frontend/src/hooks/useQueries.ts (i.e., ensure the generated/declared backend interface includes the new method and build succeeds).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Update canister.js (or .ts) to Export All Canister Actors",
+          "adjust imports to your canister interfaces"
+        ]
+      },
+      "acceptanceCriteria": [
+        "TypeScript build succeeds with no missing-method errors for getCyclesBalance.",
+        "The report page can call the backend actor method for cycles balance using the same actor creation mechanism already used by existing hooks (do not modify immutable hook files)."
       ]
     }
   ],
   "constraints": [
-    "Backend must remain a single-actor Motoko canister (all logic in backend/main.mo); do not implement a multi-canister architecture.",
-    "Only generate backend/migration.mo if needed to preserve existing state across upgrades (conditional migration policy).",
-    "Do not edit frontend immutable paths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui.",
-    "Do not implement or require WebSockets/Socket.io or any real-time infrastructure beyond polling via React Query timers.",
-    "Do not rely on third-party auth providers; only Internet Identity is supported.",
-    "Use English for any user-facing text."
+    "Backend must remain a single Motoko actor (all logic in backend/main.mo).",
+    "Do not edit files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or frontend/src/components/ui; compose them instead.",
+    "Use TanStack Router patterns already present in frontend/src/App.tsx (do not introduce react-router-dom routes)."
   ],
   "nonGoals": [
-    "Deploying or maintaining a Vercel production environment and Vercel server-side proxy endpoints (/api/noc/*).",
-    "Implementing actual cross-chain functionality, external chain integration, or real token ledger/vault canisters as separate deployed canisters (out of scope given single-actor constraint).",
-    "Implementing irreversible controller handover (“black hole mode”) scripts that remove developer control on real mainnet as an automated action inside the app."
+    "Do not add/require Vercel deployment changes or CI/CD steps.",
+    "Do not implement WebSockets or real-time push; polling via React Query is sufficient.",
+    "Do not add third-party authentication providers beyond Internet Identity.",
+    "Do not introduce additional backend canisters/services; implement required new method(s) on the existing backend actor."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }

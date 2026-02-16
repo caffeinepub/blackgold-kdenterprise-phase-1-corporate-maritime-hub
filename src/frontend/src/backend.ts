@@ -342,6 +342,7 @@ export interface backendInterface {
     getCompanyInfo(): Promise<CompanyInfo | null>;
     getConnectionStatus(): Promise<ConnectionStatus>;
     getContactForms(): Promise<Array<ContactForm>>;
+    getCyclesBalance(): Promise<bigint>;
     getDaoProposals(): Promise<Array<DAOProposal>>;
     getGiftCardAnalytics(): Promise<AnalyticsData>;
     getGiftCardById(id: string): Promise<GiftCard | null>;
@@ -701,6 +702,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.getContactForms();
+            return result;
+        }
+    }
+    async getCyclesBalance(): Promise<bigint> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCyclesBalance();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCyclesBalance();
             return result;
         }
     }

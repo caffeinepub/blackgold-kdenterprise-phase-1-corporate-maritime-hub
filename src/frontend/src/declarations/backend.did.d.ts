@@ -278,6 +278,7 @@ export interface _SERVICE {
   'getCompanyInfo' : ActorMethod<[], [] | [CompanyInfo]>,
   'getConnectionStatus' : ActorMethod<[], ConnectionStatus>,
   'getContactForms' : ActorMethod<[], Array<ContactForm>>,
+  'getCyclesBalance' : ActorMethod<[], bigint>,
   'getDaoProposals' : ActorMethod<[], Array<DAOProposal>>,
   'getGiftCardAnalytics' : ActorMethod<[], AnalyticsData>,
   'getGiftCardById' : ActorMethod<[string], [] | [GiftCard]>,

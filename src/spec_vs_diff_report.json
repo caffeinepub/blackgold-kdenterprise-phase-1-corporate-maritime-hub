@@ -1,122 +1,67 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-15T19:57:51.999Z",
-  "summary": "Diff adds a new NOC React route/page and several NOC UI components plus new React Query hooks, but backend NOC/RBAC method implementations and upgrade-safe state are not clearly evidenced in the truncated backend diff. Several unrelated frontend/SEO/marketing additions appear that were not requested. Admin user management UI is stubbed (toasts only) and UniversalLaunchOverlay does not trigger a backend launch action.",
+  "generatedAt": "2026-02-16T01:22:43.703Z",
+  "summary": "Diff adds a Universal Launch Report page and a TanStack Router route, plus new React Query hooks to poll treasury/omni-mesh/cycles/DAO proposals every 10s. However, the diff summary does not provide evidence that the backend `getCyclesBalance` query method (with RBAC) was added, nor that TypeScript canister bindings were updated, and it’s unclear whether KD Dashboard navigation includes an entry to the new report route.",
   "missing_requirements": [
     {
-      "id": "REQ-1",
-      "requirement": "Implement ICP-native NOC domain methods (AI status, DAO proposals+vote, treasury status, ZK proof generation+root, omni-mesh status, universal launch toggle) as candid-exposed methods in backend/main.mo reachable via frontend actor.",
-      "reason": "backend/main.mo diff is truncated and does not show any new NOC candid-exposed methods; only an import of Migration is visible. Frontend hooks/pages reference NOC calls, but the backend implementation is not evidenced in the provided diff snippet.",
-      "evidence": [
-        "backend/main.mo (truncated)",
-        "frontend/src/hooks/useQueries.ts (truncated)",
-        "frontend/src/pages/NOCPage.tsx (truncated)"
-      ]
-    },
-    {
       "id": "REQ-2",
-      "requirement": "Add persistent, upgrade-safe NOC state (stable storage) and only introduce backend/migration.mo conditionally if needed to preserve/transform state across upgrades.",
-      "reason": "Although backend/migration.mo was added and backend/main.mo now wires `with migration = Migration.run`, the diff does not show stable variables for NOC state, nor does it demonstrate that migration is conditional (it appears always wired in). Truncated migration.mo prevents verifying conditional behavior and state preservation.",
+      "requirement": "KD Platform Dashboard includes a navigation control that routes to the Universal Launch Report page.",
+      "reason": "`frontend/src/pages/KDDashboardPage.tsx` is truncated and the shown portion does not include any button/link that navigates to `/kd-platform/universal-launch-report` (only a Back to Landing button is visible).",
       "evidence": [
-        "backend/migration.mo (truncated)",
-        "backend/main.mo (truncated)"
+        "frontend/src/pages/KDDashboardPage.tsx"
       ]
     },
     {
       "id": "REQ-3",
-      "requirement": "Implement principal-based RBAC/user registry methods: register(), addUser(Principal) admin-only, removeUser(Principal) admin-only, getUserCount(), getUser(Principal), isAdmin(Principal), without breaking existing name/email-based admin add user flow.",
-      "reason": "No backend evidence of these principal-based RBAC methods is shown in the truncated backend/main.mo diff. On the frontend, NOC admin controls for add/remove do not appear to call backend at all (they only show toasts), so the end-to-end capability is not implemented based on the diff summary.",
+      "requirement": "Use the existing React Query hooks flow in `frontend/src/hooks/useQueries.ts + useActor` to fetch the required metrics for the report.",
+      "reason": "Instead of adding report queries to the existing `frontend/src/hooks/useQueries.ts`, the diff adds a new hooks file `useUniversalLaunchReportQueries.ts`. The BuildRequest explicitly called out using the existing `useQueries.ts` hook structure.",
       "evidence": [
-        "backend/main.mo (truncated)",
-        "frontend/src/components/noc/NOCAdminSection.tsx (truncated)"
+        "frontend/src/hooks/useUniversalLaunchReportQueries.ts"
       ]
     },
     {
-      "id": "REQ-6",
-      "requirement": "Add an admin-only NOC Admin section that (1) adds/removes a user by Principal via backend and (2) toggles universal launch/black-hole state; section must render only when caller is admin.",
-      "reason": "NOCAdminSection contains no admin gating and its add/remove handlers do not invoke backend mutations (they only display success toasts). The diff does not provide evidence that the section is conditionally rendered only when backend isAdmin is true (NOCPage is truncated before render of admin section can be verified).",
+      "id": "REQ-4",
+      "requirement": "Add backend query method `getCyclesBalance` in `backend/main.mo` returning current canister cycles balance and gated with the same RBAC pattern used by other NOC methods (AccessControl.hasPermission(..., #user)).",
+      "reason": "`backend/main.mo` is truncated and the shown snippet only shows imports (including `ExperimentalCycles`) and type declarations; it does not show a new public query method named `getCyclesBalance` nor any RBAC gating logic.",
       "evidence": [
-        "frontend/src/components/noc/NOCAdminSection.tsx (truncated)",
-        "frontend/src/pages/NOCPage.tsx (truncated)"
+        "backend/main.mo"
       ]
     },
     {
-      "id": "REQ-7",
-      "requirement": "UniversalLaunchOverlay must read omni-mesh status via backend actor calls and trigger a backend method for startUniversalLaunch (or equivalent) and update UI state accordingly.",
-      "reason": "UniversalLaunchOverlay reads omni-mesh status via a hook, but no action/button is present to trigger a backend startUniversalLaunch/toggle call; it displays a hardcoded 'UNIVERSAL LAUNCH ACTIVE' state and hardcoded Black Hole Mode badge.",
+      "id": "REQ-5",
+      "requirement": "Update frontend canister/type bindings so `getCyclesBalance` is available to TypeScript imports/typed actor bindings and builds without missing-method errors.",
+      "reason": "The report hooks call `actor.getCyclesBalance()`, but the diff summary does not show any update to the generated/declared backend interface/bindings that would add `getCyclesBalance` (e.g., in a `backend` declarations file).",
       "evidence": [
-        "frontend/src/components/noc/UniversalLaunchOverlay.tsx"
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "requirement": "Add a navigation entry to reach the new NOC route from existing site navigation (desktop and mobile).",
-      "reason": "Layout navigation items list includes only a single 'KD Platform' top-level entry and shows no explicit 'NOC' navigation item or submenu entry. While the route exists, the diff does not evidence a direct nav item to reach /kd-platform/noc.",
-      "evidence": [
-        "frontend/src/components/Layout.tsx (truncated)",
-        "frontend/src/App.tsx"
-      ]
-    },
-    {
-      "id": "REQ-9",
-      "requirement": "Update documentation for ICP-native (dfx-based) deployment and verification of NOC endpoints via dfx canister call; avoid Vercel-only steps.",
-      "reason": "Only a minimal frontend/README.md was added with architecture headings and no shown dfx deploy steps or dfx canister call verification commands for NOC methods. No root/project README updates are evidenced in the diff summary.",
-      "evidence": [
-        "frontend/README.md"
+        "frontend/src/hooks/useUniversalLaunchReportQueries.ts"
       ]
     }
   ],
   "hallucinated_features": [
     {
-      "description": "Added extensive SEO/analytics/marketing changes (GA4 tracking, JSON-LD structured data, Font Awesome CDN integration) in frontend/index.html.",
-      "reason": "Not requested by any REQ; BuildRequest focuses on NOC integration, RBAC, routing, hooks, and ICP-native docs.",
+      "description": "Added a separate report-specific hooks module (`useUniversalLaunchReportQueries.ts`) rather than extending the existing `frontend/src/hooks/useQueries.ts`.",
+      "reason": "BuildRequest did not ask for a new hooks module; it specifically referenced using the existing `useQueries.ts` flow.",
       "evidence": [
-        "frontend/index.html (mentioned in frontend-file-summaries.txt)"
+        "frontend/src/hooks/useUniversalLaunchReportQueries.ts"
       ]
     },
     {
-      "description": "Added a standalone public press release HTML page (frontend/public/press-release.html) with schema markup and GA4 event tracking.",
-      "reason": "Not requested; BuildRequest explicitly asked to port NOC UI into React components (not standalone HTML pages), and did not request marketing pages.",
+      "description": "Use of emojis in user-facing UI strings (e.g., \"🔐 Access Required\", \"🚀\", \"🌐\").",
+      "reason": "The requirement specifies English-only user-facing text; emojis are not explicitly requested and may violate a strict interpretation of that constraint.",
       "evidence": [
-        "frontend/public/press-release.html (mentioned in frontend-file-summaries.txt)"
-      ]
-    },
-    {
-      "description": "Broad UI/content enhancements across multiple non-NOC pages (Home/About/Services/Fleet/CryptoTokens/Contact) unrelated to NOC integration.",
-      "reason": "Not part of requirements; may be beneficial but is out of scope compared to the specified NOC/RBAC/docs work.",
-      "evidence": [
-        "frontend/src/pages/HomePage.tsx",
-        "frontend/src/pages/AboutPage.tsx",
-        "frontend/src/pages/ServicesPage.tsx",
-        "frontend/src/pages/FleetPage.tsx",
-        "frontend/src/pages/CryptoTokensPage.tsx",
-        "frontend/src/pages/ContactPage.tsx"
+        "frontend/src/pages/UniversalLaunchReportPage.tsx",
+        "frontend/src/pages/KDDashboardPage.tsx"
       ]
     }
   ],
   "confidence": 0.62,
   "changed_files": [
     "backend/main.mo",
-    "backend/migration.mo",
     "frontend-file-summaries.txt",
-    "frontend/README.md",
     "frontend/src/App.tsx",
-    "frontend/src/components/Layout.tsx",
-    "frontend/src/components/noc/ComplianceShield.tsx",
-    "frontend/src/components/noc/InstitutionalConsole.tsx",
-    "frontend/src/components/noc/NOCAdminSection.tsx",
-    "frontend/src/components/noc/UniversalLaunchOverlay.tsx",
-    "frontend/src/hooks/useQueries.ts",
-    "frontend/src/pages/AboutPage.tsx",
-    "frontend/src/pages/ContactPage.tsx",
-    "frontend/src/pages/CryptoTokensPage.tsx",
-    "frontend/src/pages/FleetPage.tsx",
-    "frontend/src/pages/GiftCardSystemPage.tsx",
-    "frontend/src/pages/HomePage.tsx",
+    "frontend/src/hooks/useUniversalLaunchReportQueries.ts",
     "frontend/src/pages/KDDashboardPage.tsx",
-    "frontend/src/pages/NOCPage.tsx",
-    "frontend/src/pages/ServicesPage.tsx",
+    "frontend/src/pages/UniversalLaunchReportPage.tsx",
     "project_state.json"
   ]
 }

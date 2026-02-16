@@ -12,10 +12,12 @@ import Principal "mo:base/Principal";
 import Debug "mo:base/Debug";
 import AccessControl "authorization/access-control";
 import Users "users/Users";
+import Cycles "mo:base/ExperimentalCycles";
 
-import Migration "migration";
 
-(with migration = Migration.run)
+
+
+
 actor BlackgoldKdent {
   let storage = Storage.new();
   include MixinStorage(storage);
@@ -417,6 +419,14 @@ actor BlackgoldKdent {
       Debug.trap("Unauthorized: Only users can access universal launch state");
     };
     universalLaunchState;
+  };
+
+  // New NOC Method: Get Cycles Balance (user-level access required)
+  public query ({ caller }) func getCyclesBalance() : async Nat {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Debug.trap("Unauthorized: Only users can access cycles balance");
+    };
+    Cycles.balance();
   };
 
   // Legacy Initialize Auth function
@@ -1041,3 +1051,4 @@ actor BlackgoldKdent {
     AccessControl.isAdmin(accessControlState, caller);
   };
 };
+

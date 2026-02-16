@@ -250,6 +250,7 @@ export interface backendInterface {
     getCompanyInfo(): Promise<CompanyInfo | null>;
     getConnectionStatus(): Promise<ConnectionStatus>;
     getContactForms(): Promise<Array<ContactForm>>;
+    getCyclesBalance(): Promise<bigint>;
     getDaoProposals(): Promise<Array<DAOProposal>>;
     getGiftCardAnalytics(): Promise<AnalyticsData>;
     getGiftCardById(id: string): Promise<GiftCard | null>;

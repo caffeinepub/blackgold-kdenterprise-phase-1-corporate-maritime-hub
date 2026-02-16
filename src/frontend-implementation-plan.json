@@ -1,137 +1,105 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "KD Platform: ICP-native NOC Dashboard (React + React Query + Actor calls)",
+  "title": "Universal Launch Report tab with live canister metrics (KD Platform)",
   "requirements": [
     {
-      "id": "REQ-4",
-      "summary": "Add a new NOC dashboard route (/kd-platform/noc) with sections for AI, Treasury, DAO, ZK, Omni-mesh, and Universal Launch, using actor-backed React Query data.",
+      "id": "REQ-1",
+      "summary": "Create an authenticated Universal Launch Report page that matches KD/NOC styling tokens and renders the “KD.WebAI NOC v13.1 - Universal Launch Report” view in English.",
       "acceptanceCriteria": [
-        "A new page route exists and is reachable from the app router.",
-        "The page shows distinct UI sections for AI, Treasury, DAO, ZK, Omni-mesh, and Universal Launch.",
-        "All data displayed on the page is loaded via React Query hooks calling the backend actor.",
-        "User-facing strings on the new page are written in English."
+        "A new report UI is available as a React component/page and visually matches the existing KD/NOC styling (kd-* classes) rather than raw default Tailwind grays.",
+        "All user-facing strings on the report page are in English.",
+        "The page requires Internet Identity authentication (same gating behavior as KDDashboardPage/NOCPage)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/NOCPage.tsx",
+          "path": "frontend/src/pages/UniversalLaunchReportPage.tsx",
           "operation": "create",
-          "description": "Create the NOC dashboard page component that renders distinct cards/sections for AI Status, Treasury Metrics (including a formatted TVL string), DAO Proposals (list + vote buttons), ZK Root display + Generate Solvency Proof action, Omni-mesh status indicator, and a Universal Launch overlay trigger; ensure all user-facing copy is English and all data/actions come from React Query hooks (no REST fetch usage)."
-        },
+          "description": "Create the authenticated “KD.WebAI NOC v13.1 - Universal Launch Report” page with KD/NOC Tailwind tokens (e.g., bg-kd-bg, bg-kd-panel, text-kd-text) and English-only UI text. Mirror the existing login-gated pattern used in KDDashboardPage/NOCPage. Use shadcn-ui building blocks already used in the app (e.g., Card, Button, Badge, Alert) to structure the report; verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Add a TanStack Router route for the Universal Launch Report and a KD Platform dashboard navigation entry to open it.",
+      "acceptanceCriteria": [
+        "A new TanStack Router route exists for the report page (do not use react-router-dom <Route>).",
+        "KD Platform Dashboard (frontend/src/pages/KDDashboardPage.tsx) includes a navigation control that routes to the report page.",
+        "Navigation works in both desktop and mobile layouts without breaking existing routes (/kd-platform/dashboard, /kd-platform/noc)."
+      ],
+      "file_operations": [
         {
           "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Register the new React route at path '/kd-platform/noc' and wire it into the TanStack Router route tree so it is reachable from the app router."
+          "description": "Register a new TanStack Router route (createRoute) for the Universal Launch Report page (e.g., /kd-platform/universal-launch-report) and include it in the routeTree alongside existing KD Platform routes."
         },
         {
-          "path": "frontend/src/components/noc/UniversalLaunchOverlay.tsx",
+          "path": "frontend/src/pages/KDDashboardPage.tsx",
+          "operation": "modify",
+          "description": "Add an in-app navigation control (Button/link) in the KD Platform dashboard flow that routes to the new Universal Launch Report route using TanStack Router navigation patterns. Use existing KD styling tokens and existing shadcn-ui primitives; verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Fetch and display live report metrics with React Query + useActor (treasury/TVL, Omni-Mesh, cycles balance, DAO proposals) and poll every 10 seconds with resilient loading/error handling.",
+      "acceptanceCriteria": [
+        "The report page uses React Query (not manual setInterval state management) to load the required metrics via the backend actor.",
+        "The report metrics automatically refresh at least every 10 seconds while the page is open.",
+        "Loading and error states are handled (e.g., a loading indicator and a non-crashing error message/log) and the page remains usable if one metric fails.",
+        "DAO proposals render as a list using the live proposal fields returned by getDaoProposals (id/title/description/votes)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useUniversalLaunchReportQueries.ts",
           "operation": "create",
-          "description": "Implement/port a UniversalLaunchOverlay component used by the NOC page; it should read omni-mesh status and universal launch state via React Query hooks and trigger the universal launch action via a mutation hook (no fetch('/api/...'))."
+          "description": "Add report-specific React Query hooks that compose the existing actor flow (useActor) to query getTreasuryStatus, getOmniMeshStatus, getCyclesBalance, and getDaoProposals with refetchInterval set to 10000ms. Ensure each metric query is independently enabled and fails independently so the page remains usable if one query errors."
+        },
+        {
+          "path": "frontend/src/pages/UniversalLaunchReportPage.tsx",
+          "operation": "modify",
+          "description": "Wire the report page to the report-specific hooks (React Query) and render the required sections: treasury status/TVL, Omni-Mesh status, cycles balance, and DAO proposals list (id/title/description/votesFor/votesAgainst). Add per-metric loading and error UI (non-crashing) using existing shadcn-ui primitives where appropriate; verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Wire the new getCyclesBalance backend capability into the frontend report and align frontend types to allow calling it via the existing typed actor mechanism.",
+      "acceptanceCriteria": [
+        "backend/main.mo defines a new query method getCyclesBalance that returns the canister’s current cycles balance and enforces user-level access (same AccessControl.hasPermission(..., #user) pattern as getTreasuryStatus/getOmniMeshStatus).",
+        "Frontend compiles and can call getCyclesBalance via the typed actor bindings without TypeScript errors.",
+        "No state migration (backend/migration.mo) is introduced/required for this change."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useUniversalLaunchReportQueries.ts",
+          "operation": "modify",
+          "description": "Ensure the report cycles-balance query calls actor.getCyclesBalance() via the same useActor mechanism used elsewhere and returns a bigint suitable for display formatting in the report UI."
+        },
+        {
+          "path": "frontend/src/pages/UniversalLaunchReportPage.tsx",
+          "operation": "modify",
+          "description": "Display cycles balance in the Universal Launch Report with an appropriate KD/NOC-styled metric card/section and graceful error handling if unauthorized or unavailable."
         }
       ]
     },
     {
       "id": "REQ-5",
-      "summary": "Add NOC React Query hooks in useQueries.ts for AI/Treasury/DAO/ZK/Omni-mesh/Universal Launch actor calls, following existing queryKey and invalidation patterns.",
+      "summary": "Update frontend canister/type bindings so getCyclesBalance is available to TypeScript and the report can call it without changing immutable hook files.",
       "acceptanceCriteria": [
-        "NOC-related hooks exist in useQueries.ts and compile in TypeScript.",
-        "DAO vote mutation invalidates the proposals query so vote totals refresh.",
-        "ZK proof generation invalidates/refetches current root so the UI updates after generation.",
-        "Hooks handle unauthenticated/unauthorized errors consistently with existing patterns."
+        "TypeScript build succeeds with no missing-method errors for getCyclesBalance.",
+        "The report page can call the backend actor method for cycles balance using the same actor creation mechanism already used by existing hooks (do not modify immutable hook files)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useQueries.ts",
+          "path": "frontend/src/backend.d.ts",
           "operation": "modify",
-          "description": "Add NOC hooks: useGetAIStatus, useGetTreasuryStatus, useGetDaoProposals, useVoteOnProposal, useGetZkCurrentRoot, useGenerateZkSolvencyProof, useGetOmniMeshStatus, and useStartUniversalLaunch (mapping to the backend universal launch method) using the existing useActor hook and React Query patterns (enabled gating on actor/isFetching, queryKey naming, and invalidation for proposals/root/state after mutations)."
-        }
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "summary": "Add an admin-only NOC Admin section on the NOC page for Principal-based user add/remove and universal launch/black-hole mode toggle, visible only when backend reports the caller is admin.",
-      "acceptanceCriteria": [
-        "When isAdmin is true, the NOC Admin section is visible; otherwise it is hidden.",
-        "Admin can add/remove a Principal and see user count update (or a success message).",
-        "Universal launch / black-hole toggle controls are disabled/hidden for non-admin users."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/noc/NOCAdminSection.tsx",
-          "operation": "create",
-          "description": "Create an admin-only NOC Admin UI section component with: (1) Principal text input + Add/Remove actions, and (2) universal launch/black-hole mode toggle controls; use React Query mutation hooks and show success/error feedback in English; ensure non-admin users never see the section."
+          "description": "Update/confirm the generated/declared backend interface typing so getCyclesBalance(): Promise<bigint> is present on the typed actor interface used by frontend imports (ensuring TS compilation succeeds)."
         },
         {
-          "path": "frontend/src/pages/NOCPage.tsx",
+          "path": "frontend/src/hooks/useUniversalLaunchReportQueries.ts",
           "operation": "modify",
-          "description": "Wire the NOC Admin section into the NOC page, rendering it only when the backend-derived admin check (React Query hook calling the actor) indicates the caller is admin; ensure the universal launch toggle controls are not rendered for non-admin users."
-        },
-        {
-          "path": "frontend/src/hooks/useQueries.ts",
-          "operation": "modify",
-          "description": "Add admin-focused NOC hooks required by the NOC Admin section (e.g., useNocAddUserByPrincipal, useNocRemoveUserByPrincipal, useNocGetUserCount, and useNocIsAdmin-style checks), aligning with existing queryKey/invalidation patterns; implement invalidation so user count/related admin UI refreshes after add/remove."
-        }
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "summary": "Port NOC UI components (ComplianceShield, InstitutionalConsole, UniversalLaunchOverlay) into the React+Tailwind app and update any unsupported dependencies to use actor + React Query hooks.",
-      "acceptanceCriteria": [
-        "Components compile and render inside the current React app.",
-        "UniversalLaunchOverlay reads omni-mesh status via backend actor calls (not hardcoded REST fetch).",
-        "UniversalLaunchOverlay triggers a backend method for “startUniversalLaunch” (or equivalent) and updates UI state accordingly."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/noc/ComplianceShield.tsx",
-          "operation": "create",
-          "description": "Port/create the ComplianceShield component as a React component styled with the existing Tailwind setup and shadcn/ui primitives where appropriate; ensure it integrates cleanly into the existing app component patterns. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/noc/InstitutionalConsole.tsx",
-          "operation": "create",
-          "description": "Port/create the InstitutionalConsole component as a React component; replace any prior REST/proxy assumptions with props and/or React Query hook data supplied by the NOC page. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/noc/UniversalLaunchOverlay.tsx",
-          "operation": "modify",
-          "description": "Update/complete the UniversalLaunchOverlay to remove any unsupported dependencies (e.g., getNOCActor, fetch('/api/...')) and instead use the existing actor + React Query hooks for omni-mesh status and universal launch actions/state; ensure UI updates after actions via query invalidation/refetch. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/NOCPage.tsx",
-          "operation": "modify",
-          "description": "Render the ported NOC components (ComplianceShield, InstitutionalConsole, UniversalLaunchOverlay) within the NOC dashboard page and connect them to the appropriate hook-driven data/actions so there are no orphan components."
-        }
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "summary": "Add navigation entry (desktop + mobile) to reach /kd-platform/noc while keeping existing routes intact and without modifying immutable paths.",
-      "acceptanceCriteria": [
-        "A user can navigate to the NOC page from the main navigation on desktop and mobile.",
-        "Existing navigation items and KD Platform routes continue to function."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/Layout.tsx",
-          "operation": "modify",
-          "description": "Add a new navigation item (desktop + mobile) that routes to '/kd-platform/noc' and update active-state logic so KD Platform highlighting includes the new NOC route, without changing any existing route paths."
-        }
-      ]
-    },
-    {
-      "id": "REQ-9",
-      "summary": "Update project documentation to describe ICP-native (dfx-based) deployment and verification for NOC methods, without relying on Vercel/Node proxy routes.",
-      "acceptanceCriteria": [
-        "README includes dfx-based deploy and verification commands for the NOC methods.",
-        "No requirement depends on Vercel-proxied /api/noc/* endpoints to function.",
-        "The documented verification commands correspond to actual backend methods implemented in this build."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/README.md",
-          "operation": "create",
-          "description": "Add/update a frontend-scoped README section documenting ICP-native (dfx-based) deployment for the frontend + single canister, and how to verify NOC capabilities using 'dfx canister call' against the candid-exposed methods (avoid any Vercel-proxy /api/noc/* instructions)."
+          "description": "Import the typed backend interface types (as needed) consistently with existing patterns so actor.getCyclesBalance is type-safe and produces no TypeScript errors, without modifying immutable hook files."
         }
       ]
     }
