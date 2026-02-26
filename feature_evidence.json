@@ -1,0 +1,71 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-add-a-login-gate-to-the-kd-trust-page-kdtrustpage-tsx-when-the-user-is-not-authenticated-via-internet-identity-display-a-prominent-centered-prompt-with-a-login-with-internet-identity-button-using-the-existing-useinternetidentity-hook",
+      "featureTitle": "Add a login gate to the KD Trust page (KDTrustPage.tsx): when the user is not authenticated via Internet Identity, display a prominent centered prompt with a 'Login with Internet Identity' button using the existing useInternetIdentity hook.",
+      "files": [
+        "frontend/src/pages/KDTrustPage.tsx"
+      ],
+      "components": [
+        "blob-storage@2.0.3",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "qr-code@1.0.0",
+        "camera@1.0.0",
+        "authorization@1.0.1",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-layout-tsx-navigation-header-to-display-the-authenticated-user-s-principal-truncated-e-g-first-8-and-last-4-characters-and-a-logout-button-when-the-user-is-logged-in-via-internet-identity-using-the-existing-useinternetidentity-hook-the-logout-button-should-call-the-logout-function-from-that-hook",
+      "featureTitle": "Update the Layout.tsx navigation header to display the authenticated user's principal (truncated, e.g. first 8 and last 4 characters) and a Logout button when the user is logged in via Internet Identity, using the existing useInternetIdentity hook. The logout button should call the logout function from that hook.",
+      "files": [
+        "frontend/src/components/Layout.tsx"
+      ],
+      "components": [
+        "blob-storage@2.0.3",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "qr-code@1.0.0",
+        "camera@1.0.0",
+        "authorization@1.0.1",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-allow-the-kd-trust-page-to-display-the-ai-hub-and-dashboard-content-in-guest-mode-unauthenticated-with-favorites-falling-back-to-localstorage-via-the-existing-usekdtrustfavorites-hook-show-a-non-blocking-banner-or-card-prompting-login-for-personalized-favorites-rather-than-blocking-all-content",
+      "featureTitle": "Allow the KD Trust page to display the AI Hub and dashboard content in guest mode (unauthenticated), with favorites falling back to localStorage via the existing useKDTrustFavorites hook. Show a non-blocking banner or card prompting login for personalized favorites rather than blocking all content.",
+      "files": [
+        "frontend/src/pages/KDTrustPage.tsx"
+      ],
+      "components": [
+        "blob-storage@2.0.3",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "qr-code@1.0.0",
+        "camera@1.0.0",
+        "authorization@1.0.1",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

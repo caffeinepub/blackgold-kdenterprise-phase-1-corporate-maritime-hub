@@ -1,0 +1,57 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Step 1: Frontend-only Internet Identity Authentication",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Add a login gate to the KD Trust page that displays a prominent centered prompt with a 'Login with Internet Identity' button when the user is not authenticated.",
+      "acceptanceCriteria": [
+        "When the user visits the KD Trust page and is not logged in, a login prompt is displayed prominently",
+        "The prompt includes a Login with Internet Identity button that triggers the II login flow",
+        "After successful login, the user sees the full KD Trust dashboard and AI Hub content"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/KDTrustPage.tsx",
+          "operation": "modify",
+          "description": "Add Internet Identity authentication gate at the top of the component. Import and use the useInternetIdentity hook to check authentication state. When identity is null, render a centered full-screen login prompt card with a 'Login with Internet Identity' button that calls the login() function from the hook. When authenticated, render the existing KDTrustDashboard and KDTrustAIHub sections. Preserve all existing functionality including filters, favorites, and search state."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Update the Layout.tsx navigation header to display the authenticated user's principal (truncated to first 8 and last 4 characters) and a Logout button when logged in via Internet Identity.",
+      "acceptanceCriteria": [
+        "When authenticated, the header shows the user's principal truncated",
+        "A Logout button is visible in the header when authenticated",
+        "Clicking Logout calls the II logout function and returns the user to the unauthenticated state",
+        "When not authenticated, neither the principal nor the logout button are shown in the header"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Layout.tsx",
+          "operation": "modify",
+          "description": "Import and use the useInternetIdentity hook to access identity and logout function. In the header navigation section (both desktop and mobile), add conditional rendering: when identity exists, display the truncated principal (first 8 + '...' + last 4 characters using identity.getPrincipal().toString()) and a Logout button that calls the logout() function from the hook. When identity is null, do not render the principal or logout button. Place these elements in the existing header alongside the navigation links, maintaining the current header layout and styling."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Allow the KD Trust page to display AI Hub and dashboard content in guest mode (unauthenticated) with a non-blocking banner prompting login for personalized favorites.",
+      "acceptanceCriteria": [
+        "Unauthenticated users can still browse the AI Hub tools and see the KD Trust dashboard",
+        "A non-blocking banner or prompt is shown encouraging users to log in for personalized favorites",
+        "Favorites continue to work via localStorage for unauthenticated users",
+        "Authenticated users see a visual indicator that their favorites are saved to their identity"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/KDTrustPage.tsx",
+          "operation": "modify",
+          "description": "Remove the full-screen login gate added in REQ-1. Instead, add a non-blocking banner or alert card at the top of the page (below the page header) that is only visible when identity is null. The banner should encourage users to log in with Internet Identity for personalized favorites, with a Login button. When authenticated, display a subtle indicator (e.g., a small badge or text) near the favorites section noting that favorites are saved to their identity. Ensure all existing functionality (AI Hub filters, tool grid, favorites via localStorage, KDTrustDashboard) works for both authenticated and unauthenticated users."
+        }
+      ]
+    }
+  ]
+}

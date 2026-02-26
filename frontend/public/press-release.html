@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset='UTF-8' />
+        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+        
+        <!-- Primary Meta Tags -->
+        <title>Blackgold Kdenterprise Launches BGKD Crypto Token - Press Release</title>
+        <meta name='title' content='Blackgold Kdenterprise Launches BGKD Crypto Token - Press Release' />
+        <meta name='description' content='Blackgold Kdenterprise announces the launch of BGKD Crypto Token, a digital asset backed by innovation in offshore operations, vessel management, and gold exploration. Token launch scheduled for June 1, 2025.' />
+        <meta name='keywords' content='BGKD token, crypto token launch, maritime cryptocurrency, blockchain maritime, Blackgold Kdenterprise, digital asset, offshore operations token' />
+        <meta name='author' content='Blackgold Kdenterprise' />
+        <meta name='publish_date' property='og:publish_date' content='2025-01-23T00:00:00-0000' />
+        
+        <!-- Open Graph / Facebook -->
+        <meta property='og:type' content='article' />
+        <meta property='og:url' content='https://kdent.org/press-release.html' />
+        <meta property='og:title' content='Blackgold Kdenterprise Launches BGKD Crypto Token - Press Release' />
+        <meta property='og:description' content='Blackgold Kdenterprise announces the launch of BGKD Crypto Token, a digital asset backed by innovation in offshore operations, vessel management, and gold exploration. Token launch scheduled for June 1, 2025.' />
+        <meta property='og:image' content='https://kdent.org/assets/generated/bgkd-hero-banner-animated.dim_1200x600.jpg' />
+        <meta property='og:image:width' content='1200' />
+        <meta property='og:image:height' content='600' />
+        <meta property='og:image:alt' content='BGKD Crypto Token Launch - Blackgold Kdenterprise' />
+        <meta property='og:site_name' content='Blackgold Kdenterprise' />
+        <meta property='og:locale' content='en_US' />
+        <meta property='article:published_time' content='2025-01-23T00:00:00-0000' />
+        <meta property='article:author' content='Blackgold Kdenterprise' />
+        <meta property='article:section' content='Press Release' />
+        <meta property='article:tag' content='Cryptocurrency' />
+        <meta property='article:tag' content='Maritime' />
+        <meta property='article:tag' content='Blockchain' />
+        
+        <!-- Twitter Card -->
+        <meta name='twitter:card' content='summary_large_image' />
+        <meta name='twitter:url' content='https://kdent.org/press-release.html' />
+        <meta name='twitter:title' content='Blackgold Kdenterprise Launches BGKD Crypto Token - Press Release' />
+        <meta name='twitter:description' content='Blackgold Kdenterprise announces the launch of BGKD Crypto Token, a digital asset backed by innovation in offshore operations, vessel management, and gold exploration.' />
+        <meta name='twitter:image' content='https://kdent.org/assets/generated/bgkd-hero-banner-animated.dim_1200x600.jpg' />
+        <meta name='twitter:image:alt' content='BGKD Crypto Token Launch - Blackgold Kdenterprise' />
+        
+        <!-- Canonical URL -->
+        <link rel='canonical' href='https://kdent.org/press-release.html' />
+        
+        <!-- Favicon -->
+        <link rel='icon' type='image/png' href='/assets/generated/bgkd-token-logo.dim_400x400.png' />
+        
+        <!-- Google Analytics 4 -->
+        <!-- Replace G-XXXXXXXXXX with your actual GA4 Measurement ID -->
+        <script async src='https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX'></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-XXXXXXXXXX');
+
+          // Enhanced GA4 Event Tracking
+          (function() {
+            // Track whitepaper and contract link clicks
+            document.addEventListener('click', function(e) {
+              var target = e.target.closest('a, button');
+              if (!target) return;
+              
+              var href = target.getAttribute('href') || '';
+              var text = target.textContent.toLowerCase();
+              
+              // Track whitepaper downloads
+              if (text.includes('whitepaper') || href.includes('whitepaper')) {
+                gtag('event', 'investor_document_view', {
+                  document_title: 'BGKD Whitepaper',
+                  document_type: 'whitepaper',
+                  link_url: href || window.location.href
+                });
+              }
+              
+              // Track contract link clicks
+              if (text.includes('contract') || href.includes('contract')) {
+                gtag('event', 'investor_document_view', {
+                  document_title: 'BGKD Smart Contract',
+                  document_type: 'contract',
+                  link_url: href || window.location.href
+                });
+              }
+            });
+
+            // Track form submissions
+            document.addEventListener('submit', function(e) {
+              var form = e.target;
+              var formName = 'unknown';
+              var formLocation = window.location.pathname;
+              
+              // Identify form type by checking form attributes or nearby elements
+              if (form.id) {
+                formName = form.id;
+              } else if (form.querySelector('[name="message"]')) {
+                // Check context to determine form type
+                var formContext = form.closest('[data-form-type]');
+                if (formContext) {
+                  formName = formContext.getAttribute('data-form-type');
+                } else {
+                  // Fallback: check page context
+                  if (formLocation.includes('contact')) {
+                    formName = 'contact_form';
+                  } else if (formLocation.includes('career')) {
+                    formName = 'career_form';
+                  } else if (formLocation.includes('crypto') || formLocation.includes('token')) {
+                    formName = 'investor_form';
+                  } else {
+                    formName = 'general_form';
+                  }
+                }
+              }
+              
+              gtag('event', 'form_submit', {
+                form_name: formName,
+                form_location: formLocation
+              });
+            });
+
+            // Track 90% scroll depth (fire once per pageview)
+            var scrollTracked = false;
+            window.addEventListener('scroll', function() {
+              if (scrollTracked) return;
+              
+              var scrollPercentage = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100;
+              
+              if (scrollPercentage >= 90) {
+                scrollTracked = true;
+                gtag('event', 'scroll_depth_90', {
+                  page_location: window.location.href,
+                  page_title: document.title
+                });
+              }
+            });
+          })();
+        </script>
+        
+        <!-- JSON-LD Structured Data - Article -->
+        <script type='application/ld+json'>
+        {
+          "@context": "https://schema.org",
+          "@type": "Article",
+          "headline": "Blackgold Kdenterprise Launches BGKD Crypto Token",
+          "alternativeHeadline": "Maritime Industry Leader Introduces Blockchain-Based Digital Asset",
+          "description": "Blackgold Kdenterprise announces the launch of BGKD Crypto Token, a digital asset backed by innovation in offshore operations, vessel management, and gold exploration. Token launch scheduled for June 1, 2025.",
+          "image": {
+            "@type": "ImageObject",
+            "url": "https://kdent.org/assets/generated/bgkd-hero-banner-animated.dim_1200x600.jpg",
+            "width": 1200,
+            "height": 600
+          },
+          "author": {
+            "@type": "Organization",
+            "name": "Blackgold Kdenterprise",
+            "url": "https://kdent.org"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "Blackgold Kdenterprise",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://kdent.org/assets/generated/bgkd-token-logo.dim_400x400.png",
+              "width": 400,
+              "height": 400
+            }
+          },
+          "datePublished": "2025-01-23T00:00:00-0000",
+          "dateModified": "2025-01-23T00:00:00-0000",
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://kdent.org/press-release.html"
+          },
+          "articleSection": "Press Release",
+          "keywords": "BGKD token, crypto token launch, maritime cryptocurrency, blockchain maritime, Blackgold Kdenterprise, digital asset, offshore operations",
+          "about": {
+            "@type": "Thing",
+            "name": "BGKD Crypto Token",
+            "description": "A digital asset backed by innovation in offshore operations, vessel management, and gold exploration"
+          },
+          "articleBody": "Blackgold Kdenterprise, a leading maritime and offshore operations company established in 1995, is proud to announce the upcoming launch of the BGKD Crypto Token on June 1, 2025. The BGKD token represents a groundbreaking fusion of traditional maritime excellence and cutting-edge blockchain technology. With a total supply of 100,000,000 BGKD tokens, this digital asset is designed to power the maritime and energy frontier, backed by decades of innovation in offshore operations, vessel management, and subsea gold exploration. The token will provide utility across maritime technology platforms, logistics operations, and investment transparency initiatives. Blackgold Kdenterprise operates a fleet of over 200 vessels with more than 5,000 crew members across 45 countries, bringing 30 years of maritime expertise to the blockchain space. The company's comprehensive services include ship brokerage, technical management, crew management, underwater mining with advanced ROV technology, and offshore operations. The BGKD token roadmap includes the initial launch in 2025, followed by major exchange listings in 2026, maritime platform integrations in 2027, and global expansion initiatives in 2028. All operations are conducted in accordance with international cryptocurrency regulations, ensuring transparent and compliant token distribution. For more information about the BGKD Crypto Token, including the detailed whitepaper and tokenomics, visit https://kdent.org or contact info@kdent.org."
+        }
+        </script>
+        
+        <!-- Verification Comment: View page source to confirm Article schema, GA4 tracking, and social meta tags are properly implemented -->
+        
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+                line-height: 1.6;
+                color: #1e293b;
+                background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+                min-height: 100vh;
+                padding: 2rem 1rem;
+            }
+            
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                background: white;
+                padding: 3rem;
+                border-radius: 12px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            }
+            
+            .header {
+                text-align: center;
+                margin-bottom: 2rem;
+                padding-bottom: 2rem;
+                border-bottom: 3px solid #d4af37;
+            }
+            
+            .logo {
+                width: 120px;
+                height: 120px;
+                margin: 0 auto 1.5rem;
+                border-radius: 50%;
+                overflow: hidden;
+            }
+            
+            .logo img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            
+            h1 {
+                color: #0f172a;
+                font-size: 2rem;
+                margin-bottom: 0.5rem;
+                font-weight: 700;
+            }
+            
+            .subtitle {
+                color: #64748b;
+                font-size: 1.1rem;
+                font-weight: 500;
+            }
+            
+            .date {
+                color: #94a3b8;
+                font-size: 0.9rem;
+                margin-top: 0.5rem;
+            }
+            
+            .hero-image {
+                width: 100%;
+                height: 300px;
+                object-fit: cover;
+                border-radius: 8px;
+                margin: 2rem 0;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }
+            
+            .content {
+                color: #334155;
+                font-size: 1.05rem;
+                line-height: 1.8;
+            }
+            
+            .content p {
+                margin-bottom: 1.5rem;
+            }
+            
+            .highlight {
+                background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+                color: white;
+                padding: 2rem;
+                border-radius: 8px;
+                margin: 2rem 0;
+                border-left: 4px solid #d4af37;
+            }
+            
+            .highlight h2 {
+                color: #d4af37;
+                margin-bottom: 1rem;
+                font-size: 1.5rem;
+            }
+            
+            .stats {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 1rem;
+                margin: 2rem 0;
+            }
+            
+            .stat {
+                text-align: center;
+                padding: 1.5rem;
+                background: #f8fafc;
+                border-radius: 8px;
+                border: 2px solid #e2e8f0;
+            }
+            
+            .stat-value {
+                font-size: 2rem;
+                font-weight: 700;
+                color: #0f172a;
+                display: block;
+            }
+            
+            .stat-label {
+                color: #64748b;
+                font-size: 0.9rem;
+                margin-top: 0.5rem;
+            }
+            
+            .cta {
+                text-align: center;
+                margin-top: 3rem;
+                padding-top: 2rem;
+                border-top: 2px solid #e2e8f0;
+            }
+            
+            .cta-button {
+                display: inline-block;
+                background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+                color: white;
+                padding: 1rem 2.5rem;
+                border-radius: 8px;
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 1.1rem;
+                transition: transform 0.2s, box-shadow 0.2s;
+                box-shadow: 0 4px 12px rgba(15, 23, 42, 0.3);
+            }
+            
+            .cta-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(15, 23, 42, 0.4);
+            }
+            
+            .footer {
+                text-align: center;
+                margin-top: 3rem;
+                padding-top: 2rem;
+                border-top: 2px solid #e2e8f0;
+                color: #64748b;
+                font-size: 0.9rem;
+            }
+            
+            .contact-info {
+                margin-top: 1rem;
+            }
+            
+            .contact-info a {
+                color: #1e3a5f;
+                text-decoration: none;
+                font-weight: 500;
+            }
+            
+            .contact-info a:hover {
+                color: #d4af37;
+            }
+            
+            @media (max-width: 768px) {
+                .container {
+                    padding: 2rem 1.5rem;
+                }
+                
+                h1 {
+                    font-size: 1.5rem;
+                }
+                
+                .hero-image {
+                    height: 200px;
+                }
+                
+                .stats {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class='container'>
+            <div class='header'>
+                <div class='logo'>
+                    <img src='/assets/generated/bgkd-token-logo.dim_400x400.png' alt='BGKD Token Logo' />
+                </div>
+                <h1>Blackgold Kdenterprise Launches BGKD Crypto Token</h1>
+                <p class='subtitle'>Maritime Industry Leader Introduces Blockchain-Based Digital Asset</p>
+                <p class='date'>FOR IMMEDIATE RELEASE | January 23, 2025</p>
+            </div>
+            
+            <img src='/assets/generated/bgkd-hero-banner-animated.dim_1200x600.jpg' alt='BGKD Crypto Token Launch Banner' class='hero-image' />
+            
+            <div class='content'>
+                <p><strong>Middletown, DE</strong> — Blackgold Kdenterprise, a leading maritime and offshore operations company established in 1995, is proud to announce the upcoming launch of the <strong>BGKD Crypto Token</strong> on <strong>June 1, 2025</strong>.</p>
+                
+                <p>The BGKD token represents a groundbreaking fusion of traditional maritime excellence and cutting-edge blockchain technology. This digital asset is designed to power the maritime and energy frontier, backed by decades of innovation in offshore operations, vessel management, and subsea gold exploration.</p>
+                
+                <div class='highlight'>
+                    <h2>Token Overview</h2>
+                    <p><strong>Total Supply:</strong> 100,000,000 BGKD<br>
+                    <strong>Symbol:</strong> BGKD<br>
+                    <strong>Launch Date:</strong> June 1, 2025<br>
+                    <strong>Utility:</strong> Maritime technology platforms, logistics operations, and investment transparency</p>
+                </div>
+                
+                <p>Blackgold Kdenterprise brings unparalleled maritime expertise to the blockchain space, operating a fleet of over 200 vessels with more than 5,000 crew members across 45 countries. With 30 years of industry leadership, the company offers comprehensive services including:</p>
+                
+                <ul style='margin-left: 2rem; margin-bottom: 1.5rem;'>
+                    <li>Ship Brokerage and Technical Management</li>
+                    <li>Crew Management and Offshore Crewing</li>
+                    <li>Underwater Mining with Advanced ROV Technology</li>
+                    <li>Vessel Management and Ship Repairs</li>
+                    <li>Oil & Gas Sector Operations</li>
+                </ul>
+                
+                <div class='stats'>
+                    <div class='stat'>
+                        <span class='stat-value'>200+</span>
+                        <span class='stat-label'>Vessels</span>
+                    </div>
+                    <div class='stat'>
+                        <span class='stat-value'>5,000+</span>
+                        <span class='stat-label'>Crew Members</span>
+                    </div>
+                    <div class='stat'>
+                        <span class='stat-value'>45</span>
+                        <span class='stat-label'>Countries</span>
+                    </div>
+                    <div class='stat'>
+                        <span class='stat-value'>30</span>
+                        <span class='stat-label'>Years Experience</span>
+                    </div>
+                </div>
+                
+                <p><strong>Roadmap Highlights:</strong></p>
+                <ul style='margin-left: 2rem; margin-bottom: 1.5rem;'>
+                    <li><strong>2025:</strong> Token Launch and Initial Distribution</li>
+                    <li><strong>2026:</strong> Major Exchange Listings</li>
+                    <li><strong>2027:</strong> Maritime Platform Integrations</li>
+                    <li><strong>2028:</strong> Global Expansion Initiatives</li>
+                </ul>
+                
+                <p>"The BGKD token represents our commitment to innovation and transparency in the maritime industry," said <strong>Capt. James Sterling</strong>, leadership representative at Blackgold Kdenterprise. "By combining our decades of operational excellence with blockchain technology, we're creating new opportunities for investors and stakeholders in the maritime and energy sectors."</p>
+                
+                <p>All token operations are conducted in accordance with international cryptocurrency regulations, ensuring transparent and compliant distribution. The company maintains rigorous standards for investor protection and regulatory compliance.</p>
+                
+                <div class='cta'>
+                    <p style='margin-bottom: 1.5rem; color: #334155; font-size: 1.1rem;'><strong>Learn more about the BGKD Crypto Token and access the detailed whitepaper:</strong></p>
+                    <a href='https://kdent.org' class='cta-button'>Visit BGKD Token Page</a>
+                </div>
+                
+                <div class='footer'>
+                    <p><strong>About Blackgold Kdenterprise</strong></p>
+                    <p>Blackgold Kdenterprise is a premier maritime and offshore operations company established in 1995, specializing in comprehensive vessel management, crew services, underwater mining, and innovative blockchain solutions. The company operates globally with a commitment to excellence, safety, and environmental responsibility.</p>
+                    
+                    <div class='contact-info'>
+                        <p><strong>Media Contact:</strong><br>
+                        Blackgold Kdenterprise<br>
+                        651 N Broad St #206, Middletown, DE 19709, USA<br>
+                        Phone: <a href='tel:+16466318561'>+1 646 631-8561</a><br>
+                        Email: <a href='mailto:info@kdent.org'>info@kdent.org</a><br>
+                        Web: <a href='https://kdent.org'>https://kdent.org</a></p>
+                    </div>
+                    
+                    <p style='margin-top: 2rem; font-size: 0.85rem;'>© 2025 Blackgold Kdenterprise. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

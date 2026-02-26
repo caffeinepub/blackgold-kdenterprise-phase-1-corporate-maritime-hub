@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOC Mini Status Widget</title>
+  <link rel="stylesheet" href="noc-mini-widget.css">
+</head>
+<body>
+  <!-- Widget Container -->
+  <div id="noc-mini-widget" class="noc-widget-container">
+    <!-- Collapsed State -->
+    <div class="noc-widget-collapsed">
+      <div class="noc-widget-pulse"></div>
+      <span class="noc-widget-title">NOC</span>
+      <span class="noc-widget-status-dot"></span>
+    </div>
+    
+    <!-- Expanded State -->
+    <div class="noc-widget-expanded">
+      <div class="noc-widget-header">
+        <h3 class="noc-widget-heading">KD.WebAI NOC</h3>
+        <span class="noc-widget-version">v13.2</span>
+      </div>
+      
+      <div class="noc-widget-metrics">
+        <div class="noc-metric-item noc-metric-tvl-row">
+          <span class="noc-metric-label">TVL</span>
+          <span class="noc-metric-value" id="noc-tvl">N/A</span>
+        </div>
+        
+        <div class="noc-metric-item">
+          <span class="noc-metric-label">Omni-Mesh</span>
+          <span class="noc-metric-value noc-status-badge" id="noc-omni-mesh">N/A</span>
+        </div>
+        
+        <div class="noc-metric-item">
+          <span class="noc-metric-label">AI Self-Healing</span>
+          <span class="noc-metric-value noc-status-badge" id="noc-ai-healing">N/A</span>
+        </div>
+        
+        <div class="noc-metric-item">
+          <span class="noc-metric-label">Black Hole Mode</span>
+          <span class="noc-metric-value noc-status-badge" id="noc-black-hole">N/A</span>
+        </div>
+        
+        <div class="noc-metric-item">
+          <span class="noc-metric-label">Predictive Failover</span>
+          <span class="noc-metric-value noc-status-badge" id="noc-failover">N/A</span>
+        </div>
+      </div>
+      
+      <!-- Mini Chart Container (hover-activated) -->
+      <div class="noc-chart-container" id="noc-chart-container">
+        <canvas id="noc-chart-canvas" width="280" height="60"></canvas>
+      </div>
+      
+      <div class="noc-widget-footer">
+        <span class="noc-widget-timestamp" id="noc-timestamp">--:--:--</span>
+      </div>
+    </div>
+  </div>
+  
+  <script src="noc-mini-widget.js"></script>
+</body>
+</html>

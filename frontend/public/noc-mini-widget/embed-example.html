@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOC Mini Widget - Ultra-Enhanced Pack Demo</title>
+  <link rel="stylesheet" href="noc-mini-widget.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+      min-height: 100vh;
+    }
+
+    .demo-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #64ffda;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .version-badge {
+      display: inline-block;
+      background: rgba(100, 255, 218, 0.15);
+      color: #64ffda;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid rgba(100, 255, 218, 0.3);
+      margin-bottom: 32px;
+    }
+
+    .demo-section {
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(100, 255, 218, 0.2);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #64ffda;
+      margin-bottom: 16px;
+    }
+
+    p {
+      line-height: 1.6;
+      color: rgba(226, 232, 240, 0.8);
+      margin-bottom: 16px;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    button {
+      background: rgba(100, 255, 218, 0.15);
+      color: #64ffda;
+      border: 1px solid rgba(100, 255, 218, 0.3);
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    button:hover {
+      background: rgba(100, 255, 218, 0.25);
+      border-color: rgba(100, 255, 218, 0.5);
+      box-shadow: 0 0 16px rgba(100, 255, 218, 0.3);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .feature-list li {
+      padding: 8px 0;
+      padding-left: 24px;
+      position: relative;
+      color: rgba(226, 232, 240, 0.9);
+    }
+
+    .feature-list li:before {
+      content: "✨";
+      position: absolute;
+      left: 0;
+    }
+
+    code {
+      background: rgba(100, 255, 218, 0.1);
+      color: #64ffda;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+    }
+
+    .config-example {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(100, 255, 218, 0.2);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+      overflow-x: auto;
+    }
+
+    .config-example pre {
+      margin: 0;
+      color: #64ffda;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .center {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-container">
+    <div class="center">
+      <h1>NOC Mini Widget</h1>
+      <span class="version-badge">Ultra-Enhanced Pack v3.0.0</span>
+    </div>
+
+    <div class="demo-section">
+      <h2>🚀 Ultra-Enhanced Features</h2>
+      <p>The Ultra-Enhanced Pack adds three powerful visual effects to the NOC Mini Widget:</p>
+      <ul class="feature-list">
+        <li><strong>TVL Gradient Trails:</strong> Smooth motion trails with afterglow effect during TVL updates</li>
+        <li><strong>Ultra Neon Pulse:</strong> Stronger, brighter neon-style pulses for READY/ACTIVE states with outer glow rings</li>
+        <li><strong>Spectral Radar Ring:</strong> Animated radar/ring effect for Black Hole Mode ENGAGED status</li>
+      </ul>
+      <p>All effects respect <code>prefers-reduced-motion</code> and are disabled when the widget is collapsed for optimal performance.</p>
+    </div>
+
+    <div class="demo-section">
+      <h2>⚙️ Configuration</h2>
+      <p>Enable the Ultra-Enhanced Pack by setting configuration before loading the widget:</p>
+      <div class="config-example">
+        <pre>window.NOC_MINI_WIDGET_CONFIG = {
+  // Enable Ultra-Enhanced Pack
+  ultraEnhanced: true,
+  
+  // Individual effect toggles (all default to true)
+  ultraTvlTrails: true,      // TVL gradient trails
+  ultraNeonPulse: true,       // Stronger neon pulses
+  ultraRadarRing: true,       // Black Hole radar ring
+  
+  // Standard options still available
+  enableChart: true,
+  chartMaxHistory: 20,
+  tvlAnimationSpeed: 0.1
+};</pre>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>🎮 Interactive Demo</h2>
+      <p>Click the widget in the top-right corner to expand it, then use these controls to test the Ultra-Enhanced effects:</p>
+      
+      <div class="controls">
+        <button onclick="startSimulation()">▶️ Start Live Simulation</button>
+        <button onclick="stopSimulation()">⏸️ Stop Simulation</button>
+        <button onclick="testTVLTrail()">💫 Test TVL Trail</button>
+        <button onclick="testNeonPulse()">✨ Test Neon Pulse</button>
+        <button onclick="testRadarRing()">📡 Test Radar Ring</button>
+        <button onclick="resetWidget()">🔄 Reset Widget</button>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>📊 How to Observe Effects</h2>
+      <ul class="feature-list">
+        <li><strong>TVL Trails:</strong> Click "Start Live Simulation" and watch the TVL row - you'll see gradient motion trails as values change</li>
+        <li><strong>Neon Pulse:</strong> When Omni-Mesh shows "ACTIVE" or AI Self-Healing shows "READY", notice the stronger pulsing glow with outer rings</li>
+        <li><strong>Radar Ring:</strong> When Black Hole Mode shows "ENGAGED", a rotating radar ring appears with concentric circles and a sweeping beam</li>
+      </ul>
+    </div>
+
+    <div class="demo-section">
+      <h2>📝 Usage Instructions</h2>
+      <p>To integrate the Ultra-Enhanced Pack into your application:</p>
+      <ol style="padding-left: 20px; color: rgba(226, 232, 240, 0.9);">
+        <li>Set <code>window.NOC_MINI_WIDGET_CONFIG</code> with <code>ultraEnhanced: true</code></li>
+        <li>Include <code>noc-mini-widget.css</code> and <code>noc-mini-widget.js</code></li>
+        <li>Add the widget HTML structure to your page</li>
+        <li>Update metrics using <code>window.updateNOCWidget(data)</code></li>
+      </ol>
+      <p>See <code>README.txt</code> for complete documentation.</p>
+    </div>
+  </div>
+
+  <!-- Widget HTML -->
+  <div id="noc-mini-widget" class="noc-widget-container">
+    <div class="noc-widget-collapsed">
+      <div class="noc-widget-pulse"></div>
+      <span class="noc-widget-title">NOC</span>
+      <span class="noc-widget-status-dot"></span>
+    </div>
+    
+    <div class="noc-widget-expanded">
+      <div class="noc-widget-header">
+        <h3 class="noc-widget-heading">KD.WebAI NOC</h3>
+        <span class="noc-widget-version">v13.2</span>
+      </div>
+      
+      <div class="noc-widget-metrics">
+        <div class="noc-metric-item noc-metric-tvl-row">
+          <span class="noc-metric-label">TVL</span>
+          <span class="noc-metric-value" id="noc-tvl">N/A</span>
+        </div>
+        
+        <div class="noc-metric-item">
+          <span class="noc-metric-label">Omni-Mesh</span>
+          <span class="noc-metric-value noc-status-badge" id="noc-omni-mesh">N/A</span>
+        </div>
+        
+        <div class="noc-metric-item">
+          <span class="noc-metric-label">AI Self-Healing</span>
+          <span class="noc-metric-value noc-status-badge" id="noc-ai-healing">N/A</span>
+        </div>
+        
+        <div class="noc-metric-item">
+          <span class="noc-metric-label">Black Hole Mode</span>
+          <span class="noc-metric-value noc-status-badge" id="noc-black-hole">N/A</span>
+        </div>
+        
+        <div class="noc-metric-item">
+          <span class="noc-metric-label">Predictive Failover</span>
+          <span class="noc-metric-value noc-status-badge" id="noc-failover">N/A</span>
+        </div>
+      </div>
+      
+      <div class="noc-chart-container" id="noc-chart-container">
+        <canvas id="noc-chart-canvas" width="280" height="60"></canvas>
+      </div>
+      
+      <div class="noc-widget-footer">
+        <span class="noc-widget-timestamp" id="noc-timestamp">--:--:--</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Configuration -->
+  <script>
+    // Enable Ultra-Enhanced Pack
+    window.NOC_MINI_WIDGET_CONFIG = {
+      ultraEnhanced: true,
+      ultraTvlTrails: true,
+      ultraNeonPulse: true,
+      ultraRadarRing: true,
+      enableChart: true,
+      chartMaxHistory: 20,
+      tvlAnimationSpeed: 0.1
+    };
+  </script>
+
+  <!-- Widget Script -->
+  <script src="noc-mini-widget.js"></script>
+
+  <!-- Demo Controls -->
+  <script>
+    let simulationInterval = null;
+
+    function startSimulation() {
+      if (simulationInterval) return;
+      
+      simulationInterval = setInterval(() => {
+        const tvl = 1.20 + Math.random() * 0.30;
+        const omniStates = ['ACTIVE', 'IDLE', 'OPERATIONAL'];
+        const aiStates = ['READY', 'SCANNING', 'IDLE'];
+        const bhStates = ['ENGAGED', 'INACTIVE', 'STANDBY'];
+        const pfStates = ['STANDBY', 'OPTIMIZING', 'ACTIVE'];
+
+        window.updateNOCWidget({
+          tvl: '$' + tvl.toFixed(3) + 'T',
+          omniMesh: omniStates[Math.floor(Math.random() * omniStates.length)],
+          aiSelfHealing: aiStates[Math.floor(Math.random() * aiStates.length)],
+          blackHoleMode: bhStates[Math.floor(Math.random() * bhStates.length)],
+          predictiveFailover: pfStates[Math.floor(Math.random() * pfStates.length)]
+        });
+      }, 2000);
+
+      console.log('Simulation started');
+    }
+
+    function stopSimulation() {
+      if (simulationInterval) {
+        clearInterval(simulationInterval);
+        simulationInterval = null;
+        console.log('Simulation stopped');
+      }
+    }
+
+    function testTVLTrail() {
+      // Rapidly change TVL to show trail effect
+      let count = 0;
+      const trailInterval = setInterval(() => {
+        const tvl = 1.15 + (count * 0.05);
+        window.updateNOCWidget({
+          tvl: '$' + tvl.toFixed(3) + 'T'
+        });
+        count++;
+        if (count > 10) {
+          clearInterval(trailInterval);
+        }
+      }, 300);
+    }
+
+    function testNeonPulse() {
+      window.updateNOCWidget({
+        omniMesh: 'ACTIVE',
+        aiSelfHealing: 'READY'
+      });
+      console.log('Neon pulse activated - observe ACTIVE and READY badges');
+    }
+
+    function testRadarRing() {
+      window.updateNOCWidget({
+        blackHoleMode: 'ENGAGED'
+      });
+      console.log('Radar ring activated - observe Black Hole Mode');
+    }
+
+    function resetWidget() {
+      stopSimulation();
+      window.resetNOCWidget();
+      console.log('Widget reset');
+    }
+
+    // Auto-start simulation after 2 seconds
+    setTimeout(() => {
+      startSimulation();
+    }, 2000);
+  </script>
+</body>
+</html>

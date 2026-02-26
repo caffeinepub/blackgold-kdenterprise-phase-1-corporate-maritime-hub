@@ -1,0 +1,84 @@
+{
+  "kind": "build_request",
+  "title": "Step 1: Frontend-only Internet Identity Authentication",
+  "projectName": "KD Trust Platform",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Add a login gate to the KD Trust page (KDTrustPage.tsx): when the user is not authenticated via Internet Identity, display a prominent centered prompt with a 'Login with Internet Identity' button using the existing useInternetIdentity hook.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4",
+          "msg-8"
+        ],
+        "quotes": [
+          "Add a login gate that shows a full-screen login prompt when the user is not authenticated",
+          "Add a login gate that shows Login with Internet Identity when unauthenticated."
+        ]
+      },
+      "acceptanceCriteria": [
+        "When the user visits the KD Trust page and is not logged in, a login prompt is displayed prominently",
+        "The prompt includes a Login with Internet Identity button that triggers the II login flow",
+        "After successful login, the user sees the full KD Trust dashboard and AI Hub content"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Update the Layout.tsx navigation header to display the authenticated user's principal (truncated, e.g. first 8 and last 4 characters) and a Logout button when the user is logged in via Internet Identity, using the existing useInternetIdentity hook. The logout button should call the logout function from that hook.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4",
+          "msg-8"
+        ],
+        "quotes": [
+          "Display the user's principal (truncated) and a logout button in the header."
+        ]
+      },
+      "acceptanceCriteria": [
+        "When authenticated, the header shows the user's principal truncated",
+        "A Logout button is visible in the header when authenticated",
+        "Clicking Logout calls the II logout function and returns the user to the unauthenticated state",
+        "When not authenticated, neither the principal nor the logout button are shown in the header"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Allow the KD Trust page to display the AI Hub and dashboard content in guest mode (unauthenticated), with favorites falling back to localStorage via the existing useKDTrustFavorites hook. Show a non-blocking banner or card prompting login for personalized favorites rather than blocking all content.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "optionally allow guest mode",
+          "Fall back to localStorage for anonymous users"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Unauthenticated users can still browse the AI Hub tools and see the KD Trust dashboard",
+        "A non-blocking banner or prompt is shown encouraging users to log in for personalized favorites",
+        "Favorites continue to work via localStorage for unauthenticated users",
+        "Authenticated users see a visual indicator that their favorites are saved to their identity"
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not modify backend/main.mo — this step is frontend-only with no backend changes",
+    "Do not modify immutable paths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui",
+    "Use the existing useInternetIdentity hook for all authentication state",
+    "Preserve all existing KD Trust page functionality including AI Hub filters, tool grid, and KDTrustDashboard"
+  ],
+  "nonGoals": [
+    "Backend Motoko changes for per-user favorites storage (Step 2)",
+    "Wiring frontend favorites to backend API calls (Step 3)",
+    "Saving search history to backend",
+    "Any changes to KD Ship, NOC, or other pages"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

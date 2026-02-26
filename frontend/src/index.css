@@ -1,0 +1,162 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Maritime Theme Colors (OKLCH) */
+    --maritime-navy: oklch(0.2 0.05 240);
+    --maritime-blue: oklch(0.45 0.15 240);
+    --maritime-blue-light: oklch(0.7 0.1 240);
+    --maritime-gold: oklch(0.75 0.15 60);
+    --maritime-border: oklch(0.3 0.05 240);
+    --maritime-header: oklch(0.15 0.05 240);
+
+    /* KD Ship Education Theme Colors (OKLCH) */
+    --kdship-navy: oklch(0.18 0.05 240);
+    --kdship-navy-light: oklch(0.22 0.05 240);
+    --kdship-teal: oklch(0.65 0.15 180);
+    --kdship-amber: oklch(0.7 0.15 50);
+    --kdship-text: oklch(0.95 0.02 240);
+    --kdship-text-muted: oklch(0.65 0.05 240);
+    --kdship-border: oklch(0.3 0.05 240);
+
+    /* KD Platform Colors (OKLCH) */
+    --kd-bg: oklch(0.12 0.02 240);
+    --kd-panel: oklch(0.18 0.03 240);
+    --kd-neon: oklch(0.75 0.25 180);
+    --kd-text: oklch(0.85 0.05 240);
+
+    /* Base Theme */
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.15 0.02 240);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.15 0.02 240);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.15 0.02 240);
+    --primary: oklch(0.45 0.15 240);
+    --primary-foreground: oklch(0.98 0.01 240);
+    --secondary: oklch(0.95 0.02 240);
+    --secondary-foreground: oklch(0.15 0.02 240);
+    --muted: oklch(0.95 0.02 240);
+    --muted-foreground: oklch(0.5 0.05 240);
+    --accent: oklch(0.95 0.02 240);
+    --accent-foreground: oklch(0.15 0.02 240);
+    --destructive: oklch(0.55 0.25 25);
+    --destructive-foreground: oklch(0.98 0.01 240);
+    --border: oklch(0.9 0.02 240);
+    --input: oklch(0.9 0.02 240);
+    --ring: oklch(0.45 0.15 240);
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: oklch(0.15 0.02 240);
+    --foreground: oklch(0.98 0.01 240);
+    --card: oklch(0.15 0.02 240);
+    --card-foreground: oklch(0.98 0.01 240);
+    --popover: oklch(0.15 0.02 240);
+    --popover-foreground: oklch(0.98 0.01 240);
+    --primary: oklch(0.98 0.01 240);
+    --primary-foreground: oklch(0.15 0.02 240);
+    --secondary: oklch(0.2 0.03 240);
+    --secondary-foreground: oklch(0.98 0.01 240);
+    --muted: oklch(0.2 0.03 240);
+    --muted-foreground: oklch(0.65 0.05 240);
+    --accent: oklch(0.2 0.03 240);
+    --accent-foreground: oklch(0.98 0.01 240);
+    --destructive: oklch(0.45 0.25 25);
+    --destructive-foreground: oklch(0.98 0.01 240);
+    --border: oklch(0.2 0.03 240);
+    --input: oklch(0.2 0.03 240);
+    --ring: oklch(0.45 0.15 240);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* NOC V13.2 Dashboard Animations */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(13, 148, 136, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(13, 148, 136, 0.6);
+  }
+}
+
+@keyframes data-flow {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.noc-pulse {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.noc-data-flow {
+  animation: data-flow 3s linear infinite;
+}
+
+/* NOC Mini Widget Animations */
+@keyframes widget-slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.noc-widget-enter {
+  animation: widget-slide-in 0.3s ease-out;
+}
+
+/* Ultra-Enhanced Pack Animations */
+@keyframes ultra-neon-pulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 5px rgba(13, 148, 136, 0.4),
+      0 0 10px rgba(13, 148, 136, 0.3),
+      0 0 15px rgba(13, 148, 136, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 
+      0 0 15px rgba(13, 148, 136, 0.8),
+      0 0 25px rgba(13, 148, 136, 0.6),
+      0 0 35px rgba(13, 148, 136, 0.4);
+    transform: scale(1.02);
+  }
+}
+
+.ultra-neon-pulse {
+  animation: ultra-neon-pulse 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .noc-pulse,
+  .noc-data-flow,
+  .noc-widget-enter,
+  .ultra-neon-pulse {
+    animation: none;
+  }
+}

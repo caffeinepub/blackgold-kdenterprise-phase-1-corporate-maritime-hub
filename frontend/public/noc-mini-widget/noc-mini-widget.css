@@ -1,0 +1,420 @@
+/* NOC Mini Widget - Glass Card Floating Style with Ultra-Enhanced Pack */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+.noc-widget-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Glassmorphism Base */
+.noc-widget-collapsed,
+.noc-widget-expanded {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(100, 255, 218, 0.2);
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(100, 255, 218, 0.1) inset,
+    0 0 24px rgba(100, 255, 218, 0.15);
+}
+
+/* Collapsed State */
+.noc-widget-collapsed {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  min-width: 120px;
+  position: relative;
+  overflow: hidden;
+}
+
+.noc-widget-container:hover .noc-widget-collapsed {
+  background: rgba(15, 23, 42, 0.85);
+  border-color: rgba(100, 255, 218, 0.4);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(100, 255, 218, 0.2) inset,
+    0 0 32px rgba(100, 255, 218, 0.25);
+}
+
+.noc-widget-pulse {
+  width: 8px;
+  height: 8px;
+  background: #64ffda;
+  border-radius: 50%;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  box-shadow: 0 0 8px rgba(100, 255, 218, 0.8);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+}
+
+.noc-widget-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #64ffda;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.noc-widget-status-dot {
+  width: 6px;
+  height: 6px;
+  background: #10b981;
+  border-radius: 50%;
+  margin-left: auto;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.8);
+}
+
+/* Expanded State */
+.noc-widget-expanded {
+  display: none;
+  flex-direction: column;
+  padding: 16px;
+  min-width: 280px;
+  max-width: 320px;
+  animation: expandIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.noc-widget-container.expanded .noc-widget-collapsed {
+  display: none;
+}
+
+.noc-widget-container.expanded .noc-widget-expanded {
+  display: flex;
+}
+
+@keyframes expandIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Header */
+.noc-widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(100, 255, 218, 0.2);
+}
+
+.noc-widget-heading {
+  font-size: 16px;
+  font-weight: 700;
+  color: #64ffda;
+  letter-spacing: 0.5px;
+}
+
+.noc-widget-version {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(100, 255, 218, 0.7);
+  background: rgba(100, 255, 218, 0.1);
+  padding: 2px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(100, 255, 218, 0.2);
+}
+
+/* Metrics */
+.noc-widget-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.noc-metric-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  position: relative;
+}
+
+.noc-metric-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(226, 232, 240, 0.7);
+  letter-spacing: 0.3px;
+}
+
+.noc-metric-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e2e8f0;
+  letter-spacing: 0.3px;
+}
+
+/* TVL Row with Trail Canvas */
+.noc-metric-tvl-row {
+  position: relative;
+  min-height: 40px;
+}
+
+.noc-tvl-trail-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.7;
+  z-index: 0;
+}
+
+.noc-metric-tvl-row .noc-metric-label,
+.noc-metric-tvl-row .noc-metric-value {
+  position: relative;
+  z-index: 1;
+}
+
+/* Status Badges */
+.noc-status-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+}
+
+/* Status Colors */
+.status-active {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.status-inactive {
+  background: rgba(148, 163, 184, 0.15);
+  color: #94a3b8;
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+.status-idle {
+  background: rgba(148, 163, 184, 0.15);
+  color: #94a3b8;
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+.status-ready {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.3);
+  animation: readyPulse 2s ease-in-out infinite;
+}
+
+.status-scanning {
+  background: rgba(251, 146, 60, 0.15);
+  color: #fb923c;
+  border-color: rgba(251, 146, 60, 0.3);
+}
+
+.status-standby {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.status-engaged {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* Animated Pulses */
+@keyframes readyPulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 0 rgba(251, 191, 36, 0);
+  }
+  50% {
+    opacity: 0.8;
+    box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
+  }
+}
+
+.status-active {
+  animation: activePulse 2s ease-in-out infinite;
+}
+
+@keyframes activePulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 0 rgba(16, 185, 129, 0);
+  }
+  50% {
+    opacity: 0.85;
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+  }
+}
+
+/* Black Hole ENGAGED Special Glow */
+.black-hole-engaged {
+  animation: blackHoleGlow 1.5s ease-in-out infinite;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.6);
+}
+
+@keyframes blackHoleGlow {
+  0%, 100% {
+    box-shadow: 0 0 16px rgba(239, 68, 68, 0.6);
+    text-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(239, 68, 68, 0.9);
+    text-shadow: 0 0 12px rgba(239, 68, 68, 1);
+  }
+}
+
+/* Ultra-Enhanced Neon Pulse (Stronger) */
+.ultra-neon-pulse {
+  animation: ultraNeonPulse 1.5s ease-in-out infinite !important;
+}
+
+@keyframes ultraNeonPulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 
+      0 0 20px currentColor,
+      0 0 30px currentColor,
+      inset 0 0 10px currentColor;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    box-shadow: 
+      0 0 30px currentColor,
+      0 0 45px currentColor,
+      inset 0 0 15px currentColor;
+    transform: scale(1.05);
+  }
+}
+
+/* Radar Ring Canvas */
+.noc-radar-canvas {
+  position: absolute;
+  right: -70px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  opacity: 0.9;
+  display: none;
+  z-index: 10;
+}
+
+/* Chart Container */
+.noc-chart-container {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(100, 255, 218, 0.15);
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.noc-chart-container.visible {
+  opacity: 1;
+  max-height: 80px;
+}
+
+.noc-chart-container.hidden {
+  opacity: 0;
+  max-height: 0;
+}
+
+#noc-chart-canvas {
+  width: 100%;
+  height: 60px;
+  display: block;
+}
+
+/* Footer */
+.noc-widget-footer {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(100, 255, 218, 0.15);
+  display: flex;
+  justify-content: center;
+}
+
+.noc-widget-timestamp {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(100, 255, 218, 0.6);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 1px;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .noc-widget-container,
+  .noc-widget-collapsed,
+  .noc-widget-expanded,
+  .noc-status-badge,
+  .noc-chart-container {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .noc-widget-pulse {
+    animation: none !important;
+  }
+
+  .status-ready,
+  .status-active,
+  .black-hole-engaged,
+  .ultra-neon-pulse {
+    animation: none !important;
+  }
+
+  .noc-tvl-trail-canvas,
+  .noc-radar-canvas {
+    display: none !important;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .noc-widget-container {
+    top: 10px;
+    right: 10px;
+  }
+
+  .noc-widget-expanded {
+    min-width: 260px;
+    max-width: 280px;
+  }
+}
