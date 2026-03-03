@@ -1,58 +1,74 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-26T14:56:34.680Z",
+  "generatedAt": "2026-03-03T02:11:17.751Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 3,
-    "implemented": 3,
+    "total": 5,
+    "implemented": 1,
     "items": [
       {
-        "id": "REQ-1",
-        "summary": "Add a login gate to the KD Trust page (KDTrustPage.tsx): when the user is not authenticated via Internet Identity, display a prominent centered prompt with a 'Login with Internet Identity' button using the existing useInternetIdentity hook.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/KDTrustPage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/KDTrustPage.tsx"
-        ]
+        "id": "REQ-5",
+        "summary": "Add a stable, upgrade-safe per-user favorites data structure to the Motoko backend actor. Use a stable HashMap keyed by user Principal to store each user's list of favorite AI tool names as Text arrays. Ensure state survives canister upgrades via stable variables.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
       },
       {
-        "id": "REQ-2",
-        "summary": "Update the Layout.tsx navigation header to display the authenticated user's principal (truncated, e.g. first 8 and last 4 characters) and a Logout button when the user is logged in via Internet Identity, using the existing useInternetIdentity hook. The logout button should call the logout function from that hook.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/Layout.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/Layout.tsx"
-        ]
+        "id": "REQ-6",
+        "summary": "Implement a `getFavorites` query method in the Motoko actor that identifies the caller via `msg.caller` and returns that caller's stored list of favorite tool names as `[Text]`. Return an empty array if no favorites are stored for the caller.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
       },
       {
-        "id": "REQ-3",
-        "summary": "Allow the KD Trust page to display the AI Hub and dashboard content in guest mode (unauthenticated), with favorites falling back to localStorage via the existing useKDTrustFavorites hook. Show a non-blocking banner or card prompting login for personalized favorites rather than blocking all content.",
+        "id": "REQ-7",
+        "summary": "Implement a `setFavorites` update method in the Motoko actor that accepts a `[Text]` argument (the full list of favorite tool names), identifies the caller via `msg.caller`, and overwrites the caller's stored favorites with the provided list.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-8",
+        "summary": "Update the frontend `useKDTrustFavorites` hook (frontend/src/hooks/useKDTrustFavorites.ts) to call the backend `getFavorites` and `setFavorites` actor methods for authenticated users. On login, merge any locally stored favorites from localStorage with backend favorites, persist the merged list to the backend, and clear localStorage. Unauthenticated users continue to use localStorage only.",
+        "status": "missing",
+        "plannedFiles": [
+          "frontend/src/hooks/useKDTrustFavorites.ts"
+        ],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-9",
+        "summary": "Add a live NOC mini-widget to the KD Trust page (frontend/src/pages/KDTrustPage.tsx) that displays real-time system status for Omni-Mesh, AI Self-Healing, Black Hole Mode, and Predictive Failover. Since WebSockets are not supported on the platform, use a polling interval of 5 seconds via React Query or setInterval to fetch NOC status from the existing backend actor. Each status badge must glow and pulse using CSS keyframe animations, with color-coded values: ACTIVE=green, IDLE=gray, INACTIVE=red, READY=yellow, NOT READY=orange. Apply smooth CSS transitions on status changes.",
         "status": "implemented",
         "plannedFiles": [
+          "frontend/src/components/kd/NOCLiveMiniWidget.tsx",
+          "frontend/src/index.css",
+          "frontend/src/hooks/useNOCLiveStatus.ts",
           "frontend/src/pages/KDTrustPage.tsx"
         ],
         "matchedFiles": [
+          "frontend/src/components/kd/NOCLiveMiniWidget.tsx",
+          "frontend/src/index.css",
+          "frontend/src/hooks/useNOCLiveStatus.ts",
           "frontend/src/pages/KDTrustPage.tsx"
         ]
       }
     ]
   },
   "changedFiles": [
+    "backend/main.mo",
+    "backend/migration.mo",
     "build-request.json",
-    "build-template/README.md",
-    "caffeine.lock.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/Layout.tsx",
+    "frontend/src/components/kd/NOCLiveMiniWidget.tsx",
+    "frontend/src/hooks/useNOCLiveStatus.ts",
+    "frontend/src/index.css",
     "frontend/src/pages/KDTrustPage.tsx",
     "project_state.json",
     "scratch/component-selection.json",

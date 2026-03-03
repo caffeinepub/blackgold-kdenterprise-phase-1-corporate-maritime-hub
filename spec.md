@@ -1,15 +1,14 @@
 # Specification
 
 ## Summary
-**Goal:** Add frontend-only Internet Identity authentication to the KD Trust page, with a login gate, header principal display, and guest mode support.
+**Goal:** Add backend-persisted favorites for KD Trust and a live NOC mini-widget with polled status updates to the KD Trust page.
 
 **Planned changes:**
-- Add a login gate to `KDTrustPage.tsx` that shows a centered "Login with Internet Identity" button when the user is unauthenticated, using the existing `useInternetIdentity` hook
-- After successful login, show the full KD Trust dashboard and AI Hub content
-- Update `Layout.tsx` navigation header to display the authenticated user's truncated principal (first 8 + last 4 characters) and a Logout button when logged in; hide both when unauthenticated
-- Allow unauthenticated users to browse the AI Hub and KD Trust dashboard in guest mode (no full block)
-- Show a non-blocking banner/card on the KD Trust page prompting unauthenticated users to log in for personalized favorites
-- Favorites continue to work via localStorage for unauthenticated users (existing `useKDTrustFavorites` hook)
-- Show a visual indicator to authenticated users that their favorites are saved to their identity
+- Add a stable `HashMap<Principal, [Text]>` variable in the Motoko backend actor to store per-user favorites, surviving canister upgrades
+- Implement `getFavorites` query method returning the caller's stored favorite tool names (or `[]` if none)
+- Implement `setFavorites` update method that overwrites the caller's stored favorites with a provided `[Text]` list
+- Update the `useKDTrustFavorites` frontend hook to load/save favorites from the backend for authenticated users; merge and clear localStorage favorites on login; fall back to localStorage for unauthenticated users
+- Add a NOC mini-widget to `KDTrustPage.tsx` displaying live status for Omni-Mesh, AI Self-Healing, Black Hole Mode, and Predictive Failover, polled every 5 seconds from the backend actor
+- Each NOC status badge uses CSS keyframe animations to glow and pulse, color-coded: ACTIVE=green, IDLE=gray, INACTIVE=red, READY=yellow, NOT READY=orange, with smooth CSS transitions on status changes
 
-**User-visible outcome:** Users visiting the KD Trust page can browse content as guests with a login prompt banner, or log in via Internet Identity to get a personalized experience with their principal shown in the header and a logout option available.
+**User-visible outcome:** Authenticated users see their KD Trust favorites persisted across sessions and devices via the backend. The KD Trust page also shows a live NOC widget with animated, color-coded status badges that refresh every 5 seconds.

@@ -1,81 +1,118 @@
 {
   "kind": "build_request",
-  "title": "Step 1: Frontend-only Internet Identity Authentication",
-  "projectName": "KD Trust Platform",
+  "title": "NOC Live Widget + KD Trust Favorites Backend Persistence",
+  "projectName": "KD Platform",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-1",
-      "text": "Add a login gate to the KD Trust page (KDTrustPage.tsx): when the user is not authenticated via Internet Identity, display a prominent centered prompt with a 'Login with Internet Identity' button using the existing useInternetIdentity hook.",
-      "target": "frontend",
+      "id": "REQ-5",
+      "text": "Add a stable, upgrade-safe per-user favorites data structure to the Motoko backend actor. Use a stable HashMap keyed by user Principal to store each user's list of favorite AI tool names as Text arrays. Ensure state survives canister upgrades via stable variables.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-4",
-          "msg-8"
+          "msg-recent"
         ],
         "quotes": [
-          "Add a login gate that shows a full-screen login prompt when the user is not authenticated",
-          "Add a login gate that shows Login with Internet Identity when unauthenticated."
+          "KD Trust Favorites Panel with backend persistence"
         ]
       },
       "acceptanceCriteria": [
-        "When the user visits the KD Trust page and is not logged in, a login prompt is displayed prominently",
-        "The prompt includes a Login with Internet Identity button that triggers the II login flow",
-        "After successful login, the user sees the full KD Trust dashboard and AI Hub content"
+        "A stable variable (e.g., stable var favoritesStore) of type HashMap<Principal, [Text]> exists in the actor",
+        "State is preserved across canister upgrades",
+        "The data structure is keyed by caller Principal"
       ]
     },
     {
-      "id": "REQ-2",
-      "text": "Update the Layout.tsx navigation header to display the authenticated user's principal (truncated, e.g. first 8 and last 4 characters) and a Logout button when the user is logged in via Internet Identity, using the existing useInternetIdentity hook. The logout button should call the logout function from that hook.",
-      "target": "frontend",
+      "id": "REQ-6",
+      "text": "Implement a `getFavorites` query method in the Motoko actor that identifies the caller via `msg.caller` and returns that caller's stored list of favorite tool names as `[Text]`. Return an empty array if no favorites are stored for the caller.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-4",
-          "msg-8"
+          "msg-recent"
         ],
         "quotes": [
-          "Display the user's principal (truncated) and a logout button in the header."
+          "Backend persistence for authenticated users"
         ]
       },
       "acceptanceCriteria": [
-        "When authenticated, the header shows the user's principal truncated",
-        "A Logout button is visible in the header when authenticated",
-        "Clicking Logout calls the II logout function and returns the user to the unauthenticated state",
-        "When not authenticated, neither the principal nor the logout button are shown in the header"
+        "Method signature: public query func getFavorites() : async [Text]",
+        "Returns stored favorites for the calling principal",
+        "Returns [] for principals with no stored favorites"
       ]
     },
     {
-      "id": "REQ-3",
-      "text": "Allow the KD Trust page to display the AI Hub and dashboard content in guest mode (unauthenticated), with favorites falling back to localStorage via the existing useKDTrustFavorites hook. Show a non-blocking banner or card prompting login for personalized favorites rather than blocking all content.",
-      "target": "frontend",
+      "id": "REQ-7",
+      "text": "Implement a `setFavorites` update method in the Motoko actor that accepts a `[Text]` argument (the full list of favorite tool names), identifies the caller via `msg.caller`, and overwrites the caller's stored favorites with the provided list.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-recent"
         ],
         "quotes": [
-          "optionally allow guest mode",
-          "Fall back to localStorage for anonymous users"
+          "Backend persistence for authenticated users"
         ]
       },
       "acceptanceCriteria": [
-        "Unauthenticated users can still browse the AI Hub tools and see the KD Trust dashboard",
-        "A non-blocking banner or prompt is shown encouraging users to log in for personalized favorites",
-        "Favorites continue to work via localStorage for unauthenticated users",
-        "Authenticated users see a visual indicator that their favorites are saved to their identity"
+        "Method signature: public func setFavorites(favorites: [Text]) : async ()",
+        "Overwrites the caller's existing favorites with the new list",
+        "An empty array call clears the caller's favorites"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Update the frontend `useKDTrustFavorites` hook (frontend/src/hooks/useKDTrustFavorites.ts) to call the backend `getFavorites` and `setFavorites` actor methods for authenticated users. On login, merge any locally stored favorites from localStorage with backend favorites, persist the merged list to the backend, and clear localStorage. Unauthenticated users continue to use localStorage only.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-recent"
+        ],
+        "quotes": [
+          "Merge local favorites on login",
+          "LocalStorage fallback for unauthenticated users"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Authenticated users' favorites are loaded from the backend on mount",
+        "Toggling a favorite calls setFavorites on the backend for authenticated users",
+        "On login, localStorage favorites are merged with backend favorites and localStorage is cleared",
+        "Unauthenticated users read/write favorites to localStorage only"
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "text": "Add a live NOC mini-widget to the KD Trust page (frontend/src/pages/KDTrustPage.tsx) that displays real-time system status for Omni-Mesh, AI Self-Healing, Black Hole Mode, and Predictive Failover. Since WebSockets are not supported on the platform, use a polling interval of 5 seconds via React Query or setInterval to fetch NOC status from the existing backend actor. Each status badge must glow and pulse using CSS keyframe animations, with color-coded values: ACTIVE=green, IDLE=gray, INACTIVE=red, READY=yellow, NOT READY=orange. Apply smooth CSS transitions on status changes.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-recent"
+        ],
+        "quotes": [
+          "Live NOC Mini-Widget with glowing pulsing indicators",
+          "Glowing, pulsing badges for each system status",
+          "Smooth transitions on status changes"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A NOC mini-widget is visible on the KD Trust page",
+        "Omni-Mesh, AI Self-Healing, Black Hole Mode, and Predictive Failover statuses are displayed",
+        "Each status badge glows and pulses via CSS keyframe animation",
+        "Status colors match: ACTIVE=green, IDLE=gray, INACTIVE=red, READY=yellow, NOT READY=orange",
+        "Status values update every 5 seconds via polling (no WebSocket)",
+        "CSS transitions animate badge changes smoothly"
       ]
     }
   ],
   "constraints": [
-    "Do not modify backend/main.mo — this step is frontend-only with no backend changes",
-    "Do not modify immutable paths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui",
-    "Use the existing useInternetIdentity hook for all authentication state",
-    "Preserve all existing KD Trust page functionality including AI Hub filters, tool grid, and KDTrustDashboard"
+    "WebSockets are not supported on this platform — use polling (setInterval or React Query refetchInterval) for live NOC status updates instead",
+    "Do not edit any files listed under frontend.immutablePaths",
+    "All Motoko logic must remain in the single main actor (backend/main.mo)",
+    "getFavorites and setFavorites must use msg.caller (Principal) as the key, not a userId Text parameter"
   ],
   "nonGoals": [
-    "Backend Motoko changes for per-user favorites storage (Step 2)",
-    "Wiring frontend favorites to backend API calls (Step 3)",
-    "Saving search history to backend",
-    "Any changes to KD Ship, NOC, or other pages"
+    "Building a full KD control room dashboard grid with multiple NOC widgets and metrics panels",
+    "Implementing real WebSocket connectivity",
+    "Adding new AI tools or changing the existing aiTools data source",
+    "Changing the overall visual theme of the KD Trust page beyond the NOC widget"
   ],
   "imageRequirements": {
     "required": [],

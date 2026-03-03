@@ -218,17 +218,23 @@ export function useGetConnectionStatus() {
 }
 
 export function useGetCallerUserProfile() {
-  const { actor, isFetching } = useActor();
+  const { actor, isFetching: actorFetching } = useActor();
 
-  return useQuery<UserProfile | null>({
+  const query = useQuery<UserProfile | null>({
     queryKey: ['currentUserProfile'],
     queryFn: async () => {
-      if (!actor) return null;
+      if (!actor) throw new Error('Actor not available');
       return actor.getCallerUserProfile();
     },
-    enabled: !!actor && !isFetching,
+    enabled: !!actor && !actorFetching,
     retry: false,
   });
+
+  return {
+    ...query,
+    isLoading: actorFetching || query.isLoading,
+    isFetched: !!actor && query.isFetched,
+  };
 }
 
 export function useSaveCallerUserProfile() {
@@ -435,7 +441,6 @@ export function useGetAllShipments() {
       return actor.getAllShipments();
     },
     enabled: !!actor && !isFetching,
-    refetchInterval: 30000,
   });
 }
 
@@ -517,14 +522,13 @@ export function useUpdateShipmentStatus() {
         data.notes
       );
     },
-    onSuccess: (_, variables) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['shipments'] });
-      queryClient.invalidateQueries({ queryKey: ['shipment', variables.shipmentId] });
     },
   });
 }
 
-// Vessel Registry Hooks (per-principal ship management)
+// Vessel Registry Hooks
 
 export function useGetMyVessels() {
   const { actor, isFetching } = useActor();
@@ -593,5 +597,36 @@ export function useGetRegistryCount() {
       return actor.getRegistryCount();
     },
     enabled: !!actor && !isFetching,
+  });
+}
+
+// KD Trust Favorites Hooks
+
+export function useGetFavorites(isAuthenticated: boolean) {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<string[]>({
+    queryKey: ['kdTrustFavorites'],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getFavorites();
+    },
+    enabled: !!actor && !isFetching && isAuthenticated,
+    retry: false,
+  });
+}
+
+export function useSetFavorites() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (favorites: string[]) => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.setFavorites(favorites);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['kdTrustFavorites'] });
+    },
   });
 }

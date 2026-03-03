@@ -329,6 +329,7 @@ export interface backendInterface {
     getContactForms(): Promise<Array<ContactForm>>;
     getCyclesBalance(): Promise<bigint>;
     getDaoProposals(): Promise<Array<DAOProposal>>;
+    getFavorites(): Promise<Array<string>>;
     getGiftCardAnalytics(): Promise<AnalyticsData>;
     getGiftCardById(id: string): Promise<GiftCard | null>;
     getGiftCards(): Promise<Array<GiftCard>>;
@@ -366,6 +367,7 @@ export interface backendInterface {
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     seedUsersDefault(): Promise<void>;
     setCompanyInfo(name: string, tagline: string, address: string, phone: string, email: string, vessels: bigint, crew: bigint, countries: bigint, years: bigint, leadershipQuote: string): Promise<void>;
+    setFavorites(favorites: Array<string>): Promise<void>;
     setTokenomics(totalSupply: bigint, symbol: string, governance: string, utility: string, roadmap: string, complianceNotice: string, whitepaperLink: string, contractLink: string): Promise<void>;
     submitCareerInquiry(name: string, email: string, message: string): Promise<void>;
     submitContactForm(name: string, email: string, message: string): Promise<void>;

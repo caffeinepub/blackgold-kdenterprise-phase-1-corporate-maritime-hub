@@ -415,6 +415,7 @@ export const idlService = IDL.Service({
   'getContactForms' : IDL.Func([], [IDL.Vec(ContactForm)], ['query']),
   'getCyclesBalance' : IDL.Func([], [IDL.Nat], ['query']),
   'getDaoProposals' : IDL.Func([], [IDL.Vec(DAOProposal)], ['query']),
+  'getFavorites' : IDL.Func([], [IDL.Vec(IDL.Text)], ['query']),
   'getGiftCardAnalytics' : IDL.Func([], [AnalyticsData], ['query']),
   'getGiftCardById' : IDL.Func([IDL.Text], [IDL.Opt(GiftCard)], ['query']),
   'getGiftCards' : IDL.Func([], [IDL.Vec(GiftCard)], ['query']),
@@ -484,6 +485,7 @@ export const idlService = IDL.Service({
       [],
       [],
     ),
+  'setFavorites' : IDL.Func([IDL.Vec(IDL.Text)], [], []),
   'setTokenomics' : IDL.Func(
       [
         IDL.Nat,
@@ -962,6 +964,7 @@ export const idlFactory = ({ IDL }) => {
     'getContactForms' : IDL.Func([], [IDL.Vec(ContactForm)], ['query']),
     'getCyclesBalance' : IDL.Func([], [IDL.Nat], ['query']),
     'getDaoProposals' : IDL.Func([], [IDL.Vec(DAOProposal)], ['query']),
+    'getFavorites' : IDL.Func([], [IDL.Vec(IDL.Text)], ['query']),
     'getGiftCardAnalytics' : IDL.Func([], [AnalyticsData], ['query']),
     'getGiftCardById' : IDL.Func([IDL.Text], [IDL.Opt(GiftCard)], ['query']),
     'getGiftCards' : IDL.Func([], [IDL.Vec(GiftCard)], ['query']),
@@ -1043,6 +1046,7 @@ export const idlFactory = ({ IDL }) => {
         [],
         [],
       ),
+    'setFavorites' : IDL.Func([IDL.Vec(IDL.Text)], [], []),
     'setTokenomics' : IDL.Func(
         [
           IDL.Nat,

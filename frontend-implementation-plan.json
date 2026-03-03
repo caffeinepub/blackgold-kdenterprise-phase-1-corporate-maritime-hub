@@ -1,55 +1,56 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Step 1: Frontend-only Internet Identity Authentication",
+  "title": "NOC Live Widget + KD Trust Favorites Frontend Integration",
   "requirements": [
     {
-      "id": "REQ-1",
-      "summary": "Add a login gate to the KD Trust page that displays a prominent centered prompt with a 'Login with Internet Identity' button when the user is not authenticated.",
+      "id": "REQ-8",
+      "summary": "Update useKDTrustFavorites hook to persist authenticated user favorites to backend via getFavorites/setFavorites methods, merge localStorage on login, and fall back to localStorage for unauthenticated users",
       "acceptanceCriteria": [
-        "When the user visits the KD Trust page and is not logged in, a login prompt is displayed prominently",
-        "The prompt includes a Login with Internet Identity button that triggers the II login flow",
-        "After successful login, the user sees the full KD Trust dashboard and AI Hub content"
+        "Authenticated users' favorites are loaded from the backend on mount",
+        "Toggling a favorite calls setFavorites on the backend for authenticated users",
+        "On login, localStorage favorites are merged with backend favorites and localStorage is cleared",
+        "Unauthenticated users read/write favorites to localStorage only"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/KDTrustPage.tsx",
+          "path": "frontend/src/hooks/useKDTrustFavorites.ts",
           "operation": "modify",
-          "description": "Add Internet Identity authentication gate at the top of the component. Import and use the useInternetIdentity hook to check authentication state. When identity is null, render a centered full-screen login prompt card with a 'Login with Internet Identity' button that calls the login() function from the hook. When authenticated, render the existing KDTrustDashboard and KDTrustAIHub sections. Preserve all existing functionality including filters, favorites, and search state."
+          "description": "Extend the hook to detect authenticated state via useInternetIdentity. When authenticated, replace localStorage persistence with backend actor.getFavorites() on mount and actor.setFavorites(favorites) on toggle. Implement a login-merge flow that fetches backend favorites, merges them with localStorage favorites (union), persists the merged list via setFavorites, and clears localStorage. For unauthenticated users, preserve existing localStorage-only behavior. Use useQuery for getFavorites with enabled flag based on auth state, and useMutation for setFavorites that invalidates the query cache."
         }
       ]
     },
     {
-      "id": "REQ-2",
-      "summary": "Update the Layout.tsx navigation header to display the authenticated user's principal (truncated to first 8 and last 4 characters) and a Logout button when logged in via Internet Identity.",
+      "id": "REQ-9",
+      "summary": "Add a live NOC mini-widget to KDTrustPage displaying Omni-Mesh, AI Self-Healing, Black Hole Mode, and Predictive Failover statuses with glowing, pulsing CSS animations and 5-second polling updates",
       "acceptanceCriteria": [
-        "When authenticated, the header shows the user's principal truncated",
-        "A Logout button is visible in the header when authenticated",
-        "Clicking Logout calls the II logout function and returns the user to the unauthenticated state",
-        "When not authenticated, neither the principal nor the logout button are shown in the header"
+        "A NOC mini-widget is visible on the KD Trust page",
+        "Omni-Mesh, AI Self-Healing, Black Hole Mode, and Predictive Failover statuses are displayed",
+        "Each status badge glows and pulses via CSS keyframe animation",
+        "Status colors match: ACTIVE=green, IDLE=gray, INACTIVE=red, READY=yellow, NOT READY=orange",
+        "Status values update every 5 seconds via polling (no WebSocket)",
+        "CSS transitions animate badge changes smoothly"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/Layout.tsx",
+          "path": "frontend/src/components/kd/NOCLiveMiniWidget.tsx",
+          "operation": "create",
+          "description": "Create a React component that displays four system status badges (Omni-Mesh, AI Self-Healing, Black Hole Mode, Predictive Failover) in a compact card layout. Each badge shows a label and status text with a glowing dot indicator. Implement CSS classes for status-specific colors: ACTIVE uses green (bg-green-500), IDLE uses gray (bg-gray-400), INACTIVE uses red (bg-red-500), READY uses yellow (bg-yellow-400), NOT READY uses orange (bg-orange-500). Apply a pulse animation class to each badge dot. Use React Query's refetchInterval option set to 5000ms to poll backend status data. Accept status values as props with defaults for when backend data is unavailable. Structure the component with glassmorphism styling to match the existing KD Trust design system."
+        },
+        {
+          "path": "frontend/src/index.css",
           "operation": "modify",
-          "description": "Import and use the useInternetIdentity hook to access identity and logout function. In the header navigation section (both desktop and mobile), add conditional rendering: when identity exists, display the truncated principal (first 8 + '...' + last 4 characters using identity.getPrincipal().toString()) and a Logout button that calls the logout() function from the hook. When identity is null, do not render the principal or logout button. Place these elements in the existing header alongside the navigation links, maintaining the current header layout and styling."
-        }
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "summary": "Allow the KD Trust page to display AI Hub and dashboard content in guest mode (unauthenticated) with a non-blocking banner prompting login for personalized favorites.",
-      "acceptanceCriteria": [
-        "Unauthenticated users can still browse the AI Hub tools and see the KD Trust dashboard",
-        "A non-blocking banner or prompt is shown encouraging users to log in for personalized favorites",
-        "Favorites continue to work via localStorage for unauthenticated users",
-        "Authenticated users see a visual indicator that their favorites are saved to their identity"
-      ],
-      "file_operations": [
+          "description": "Add CSS keyframe animations for the NOC mini-widget status badges. Define @keyframes pulse-glow with scale and opacity transitions for the glowing effect. Define @keyframes status-fade for smooth color transitions when status values change. Add utility classes .noc-badge-glow and .noc-status-transition that apply these animations with appropriate duration and easing. Ensure animations use GPU-accelerated properties (transform, opacity) for smooth 60fps performance."
+        },
+        {
+          "path": "frontend/src/hooks/useNOCLiveStatus.ts",
+          "operation": "create",
+          "description": "Create a React Query hook that fetches NOC system status from the backend actor. Use useQuery with a 5-second refetchInterval to implement polling. The query should call backend methods to retrieve Omni-Mesh status (getOmniMeshStatus), AI Self-Healing status (getAIStatus), and derive Black Hole Mode and Predictive Failover statuses from available backend capabilities. Map backend response data to a normalized status format with fields for each system (omniMesh, aiSelfHealing, blackHoleMode, predictiveFailover) containing status text (ACTIVE/IDLE/INACTIVE/READY/NOT READY). Handle loading and error states gracefully, returning fallback status values when backend is unavailable."
+        },
         {
           "path": "frontend/src/pages/KDTrustPage.tsx",
           "operation": "modify",
-          "description": "Remove the full-screen login gate added in REQ-1. Instead, add a non-blocking banner or alert card at the top of the page (below the page header) that is only visible when identity is null. The banner should encourage users to log in with Internet Identity for personalized favorites, with a Login button. When authenticated, display a subtle indicator (e.g., a small badge or text) near the favorites section noting that favorites are saved to their identity. Ensure all existing functionality (AI Hub filters, tool grid, favorites via localStorage, KDTrustDashboard) works for both authenticated and unauthenticated users."
+          "description": "Import and render the new NOCLiveMiniWidget component above the existing KDTrustDashboard component. Wire the useNOCLiveStatus hook to fetch live status data and pass it as props to NOCLiveMiniWidget. Position the widget prominently near the top of the page in a dedicated section with appropriate spacing and a subtle heading like 'Live System Status'. Ensure the widget is visible before the user scrolls and uses the page's existing color scheme. Add a timestamp display showing the last update time derived from the query's dataUpdatedAt value."
         }
       ]
     }

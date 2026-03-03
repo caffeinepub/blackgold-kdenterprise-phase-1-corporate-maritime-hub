@@ -3,6 +3,7 @@ import { Shield, Brain, LogIn, Star, CheckCircle2 } from 'lucide-react';
 import KDTrustDashboard from '../components/KDTrustDashboard';
 import KDTrustAIHub from '../components/kd/KDTrustAIHub';
 import AIHubFilters from '../components/kd/AIHubFilters';
+import NOCLiveMiniWidget from '../components/kd/NOCLiveMiniWidget';
 import { TOOLS_DATABASE } from '../data/aiTools';
 import { useKDTrustFavorites } from '../hooks/useKDTrustFavorites';
 import { useKDTrustLastSearch } from '../hooks/useKDTrustLastSearch';
@@ -88,6 +89,11 @@ export default function KDTrustPage() {
             </span>
           </div>
         )}
+
+        {/* Live NOC Mini Widget */}
+        <div className="mb-8">
+          <NOCLiveMiniWidget />
+        </div>
 
         {/* Node Monitoring Dashboard */}
         <KDTrustDashboard />

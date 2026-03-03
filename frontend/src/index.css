@@ -152,11 +152,112 @@
   animation: ultra-neon-pulse 2s ease-in-out infinite;
 }
 
+/* ============================================================
+   NOC Live Mini Widget — Status Badge Glow Animations
+   ============================================================ */
+
+/* Dot pulse for each status badge */
+@keyframes noc-dot-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.4);
+  }
+}
+
+.noc-dot-pulse {
+  animation: noc-dot-pulse 1.5s ease-in-out infinite;
+}
+
+/* Smooth color/opacity transition when status changes */
+.noc-status-transition {
+  transition: background-color 0.5s ease, color 0.5s ease, box-shadow 0.5s ease;
+}
+
+/* Green glow — ACTIVE */
+@keyframes noc-glow-green {
+  0%, 100% {
+    box-shadow: 0 0 4px rgba(74, 222, 128, 0.3), 0 0 8px rgba(74, 222, 128, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(74, 222, 128, 0.7), 0 0 20px rgba(74, 222, 128, 0.4);
+  }
+}
+
+.noc-badge-glow-green {
+  animation: noc-glow-green 1.8s ease-in-out infinite;
+}
+
+/* Gray glow — IDLE */
+@keyframes noc-glow-gray {
+  0%, 100% {
+    box-shadow: 0 0 3px rgba(156, 163, 175, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 8px rgba(156, 163, 175, 0.4);
+  }
+}
+
+.noc-badge-glow-gray {
+  animation: noc-glow-gray 2.5s ease-in-out infinite;
+}
+
+/* Red glow — INACTIVE */
+@keyframes noc-glow-red {
+  0%, 100% {
+    box-shadow: 0 0 4px rgba(248, 113, 113, 0.3), 0 0 8px rgba(248, 113, 113, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(248, 113, 113, 0.7), 0 0 20px rgba(248, 113, 113, 0.35);
+  }
+}
+
+.noc-badge-glow-red {
+  animation: noc-glow-red 1.8s ease-in-out infinite;
+}
+
+/* Yellow glow — READY */
+@keyframes noc-glow-yellow {
+  0%, 100% {
+    box-shadow: 0 0 4px rgba(250, 204, 21, 0.3), 0 0 8px rgba(250, 204, 21, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(250, 204, 21, 0.65), 0 0 18px rgba(250, 204, 21, 0.3);
+  }
+}
+
+.noc-badge-glow-yellow {
+  animation: noc-glow-yellow 2s ease-in-out infinite;
+}
+
+/* Orange glow — NOT READY */
+@keyframes noc-glow-orange {
+  0%, 100% {
+    box-shadow: 0 0 4px rgba(251, 146, 60, 0.3), 0 0 8px rgba(251, 146, 60, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(251, 146, 60, 0.65), 0 0 18px rgba(251, 146, 60, 0.3);
+  }
+}
+
+.noc-badge-glow-orange {
+  animation: noc-glow-orange 2s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .noc-pulse,
   .noc-data-flow,
   .noc-widget-enter,
-  .ultra-neon-pulse {
+  .ultra-neon-pulse,
+  .noc-dot-pulse,
+  .noc-badge-glow-green,
+  .noc-badge-glow-gray,
+  .noc-badge-glow-red,
+  .noc-badge-glow-yellow,
+  .noc-badge-glow-orange {
     animation: none;
   }
 }

@@ -374,6 +374,7 @@ export interface _SERVICE {
   'getContactForms' : ActorMethod<[], Array<ContactForm>>,
   'getCyclesBalance' : ActorMethod<[], bigint>,
   'getDaoProposals' : ActorMethod<[], Array<DAOProposal>>,
+  'getFavorites' : ActorMethod<[], Array<string>>,
   'getGiftCardAnalytics' : ActorMethod<[], AnalyticsData>,
   'getGiftCardById' : ActorMethod<[string], [] | [GiftCard]>,
   'getGiftCards' : ActorMethod<[], Array<GiftCard>>,
@@ -428,6 +429,7 @@ export interface _SERVICE {
     ],
     undefined
   >,
+  'setFavorites' : ActorMethod<[Array<string>], undefined>,
   'setTokenomics' : ActorMethod<
     [bigint, string, string, string, string, string, string, string],
     undefined

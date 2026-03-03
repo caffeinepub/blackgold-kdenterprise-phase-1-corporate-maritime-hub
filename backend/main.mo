@@ -13,7 +13,9 @@ import Debug "mo:base/Debug";
 import AccessControl "authorization/access-control";
 import Users "users/Users";
 import Cycles "mo:base/ExperimentalCycles";
+import Migration "migration";
 
+(with migration = Migration.run)
 actor {
 
   let storage = Storage.new();
@@ -388,6 +390,9 @@ actor {
   var giftCards : OrderedMap.Map<Text, GiftCard> = textMap.empty<GiftCard>();
   var userProfiles : OrderedMap.Map<Principal, UserProfile> = principalMap.empty<UserProfile>();
 
+  // Use OrderedMap instead of native HashMap for stable storage
+  var userFavorites : OrderedMap.Map<Principal, [Text]> = principalMap.empty<[Text]>();
+
   // Access Control State
   let accessControlState : AccessControl.AccessControlState = AccessControl.initState();
 
@@ -430,6 +435,24 @@ actor {
 
   var userVessels : OrderedMap.Map<Principal, UserShipData> = principalMap.empty();
   var nextVesselId : Nat = 1;
+
+  // Favorites Methods - require #user permission (no anonymous/guest access)
+  public query ({ caller }) func getFavorites() : async [Text] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Debug.trap("Unauthorized: Only users can view favorites");
+    };
+    switch (principalMap.get(userFavorites, caller)) {
+      case (null) { [] };
+      case (?favorites) { favorites };
+    };
+  };
+
+  public shared ({ caller }) func setFavorites(favorites : [Text]) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Debug.trap("Unauthorized: Only users can set favorites");
+    };
+    userFavorites := principalMap.put(userFavorites, caller, favorites);
+  };
 
   // Quiz Management Functions
 
@@ -1678,3 +1701,4 @@ actor {
     };
   };
 };
+

@@ -421,6 +421,7 @@ export interface backendInterface {
     getContactForms(): Promise<Array<ContactForm>>;
     getCyclesBalance(): Promise<bigint>;
     getDaoProposals(): Promise<Array<DAOProposal>>;
+    getFavorites(): Promise<Array<string>>;
     getGiftCardAnalytics(): Promise<AnalyticsData>;
     getGiftCardById(id: string): Promise<GiftCard | null>;
     getGiftCards(): Promise<Array<GiftCard>>;
@@ -458,6 +459,7 @@ export interface backendInterface {
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     seedUsersDefault(): Promise<void>;
     setCompanyInfo(name: string, tagline: string, address: string, phone: string, email: string, vessels: bigint, crew: bigint, countries: bigint, years: bigint, leadershipQuote: string): Promise<void>;
+    setFavorites(favorites: Array<string>): Promise<void>;
     setTokenomics(totalSupply: bigint, symbol: string, governance: string, utility: string, roadmap: string, complianceNotice: string, whitepaperLink: string, contractLink: string): Promise<void>;
     submitCareerInquiry(name: string, email: string, message: string): Promise<void>;
     submitContactForm(name: string, email: string, message: string): Promise<void>;
@@ -952,6 +954,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.getDaoProposals();
+            return result;
+        }
+    }
+    async getFavorites(): Promise<Array<string>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getFavorites();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getFavorites();
             return result;
         }
     }
@@ -1470,6 +1486,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.setCompanyInfo(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+            return result;
+        }
+    }
+    async setFavorites(arg0: Array<string>): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.setFavorites(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.setFavorites(arg0);
             return result;
         }
     }
